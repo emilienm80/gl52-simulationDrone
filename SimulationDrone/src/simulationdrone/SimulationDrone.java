@@ -5,6 +5,7 @@
  */
 package simulationdrone;
 
+import graphicInterface.AnimationTimerTest;
 import graphicInterface.Main;
 import javafx.application.Application;
 
@@ -18,7 +19,8 @@ public class SimulationDrone {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Application.launch(Main.class);
+        //Application.launch(Main.class);
+        Application.launch(AnimationTimerTest.class);
     }
     
 }
