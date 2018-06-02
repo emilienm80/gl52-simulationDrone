@@ -5,7 +5,8 @@
  */
 package graphicInterface;
 
-import javafx.animation.PathTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -17,11 +18,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.CubicCurveTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -48,18 +46,20 @@ public class Main extends Application {
         applicationFrame.setResizable(false);
 
         BorderPane layoutSettings = new BorderPane();                           // creation layout for groupBox Settings 
-
-        /* Commentaire a faire  */
+        
         Button btn = new Button("test");
-        layoutSettings.setCenter(btn);
-        layoutSettings.setRight(new Button("Right"));
-        layoutSettings.setLeft(new Button("Left"));
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 //TODO
             }
         });
+        VBox containerButton = new VBox();
+        containerButton.getChildren().add(new Button("1"));
+        containerButton.getChildren().add(new Button("2"));
+        containerButton.getChildren().add(btn);
+        layoutSettings.setCenter(containerButton);
+
 
         TitledPane groupBoxSettings = new TitledPane();                         // creation groupBox Settings
         groupBoxSettings.setText("Paramètres");                                 // name of the groupBox Settings
@@ -68,8 +68,27 @@ public class Main extends Application {
         groupBoxSettings.setLayoutX(borderSize);
         groupBoxSettings.setLayoutY(borderSize);                                // set position of the group box settings
         groupBoxSettings.setPrefSize(groupBoxWidth, groupBoxHeight);            // set size of the groupBox Settings        
+        framePanel.getChildren().add(groupBoxSettings);                         // add groupBox Settings to group
 
-
+ 
+        /*TitledPane groupBoxSimulation = new TitledPane();
+        groupBoxSimulation.setText("Simulation");
+        groupBoxSimulation.setCollapsible(false);
+        groupBoxSimulation.setLayoutX((borderSize * 2) + groupBoxWidth);
+        groupBoxSimulation.setLayoutY(borderSize);
+        groupBoxSimulation.setPrefSize((screenWidth - ((borderSize * 3) + groupBoxWidth)), (screenHeight - (2 * borderSize)));
+        Group frameSimulation = new Group();
+        //Scene sceneSimulation = new Scene(frameSimulation, Color.WHITESMOKE);
+        Rectangle rect = new Rectangle(0, 0, 100, 100);
+        rect.setFill(Color.RED);
+        Rectangle rect1 = new Rectangle(100, 0, 1000, 100);
+        rect1.setFill(Color.BLUE);
+        frameSimulation.getChildren().add(rect);
+        frameSimulation.getChildren().add(rect1);
+        Scene sceneSimulation = new Scene(frameSimulation, Color.YELLOW); 
+        frameSimulation.setS
+        groupBoxSimulation.setContent(frameSimulation);
+        framePanel.getChildren().add(groupBoxSimulation);*/
 
         /*final Rectangle rectPath = new Rectangle(0, 0, 40, 40);
         rectPath.setArcHeight(10);
@@ -89,22 +108,30 @@ public class Main extends Application {
         pathTransition.play();
         groupBoxSimulation.setContent(rectPath);*/
 
-
-
-        
-        
-        
         final Canvas canvas = new Canvas((screenWidth - ((borderSize * 3) + groupBoxWidth)), (screenHeight - (2 * borderSize)));
         canvas.setTranslateX((borderSize * 2) + groupBoxWidth);
         canvas.setTranslateY(borderSize);
         GraphicsContext gc = canvas.getGraphicsContext2D(); 
         gc.setFill(Color.WHITE);
-        gc.fillRect(0,0,(screenWidth - ((borderSize * 3) + groupBoxWidth)), (screenHeight - (2 * borderSize)));
+        gc.fillRoundRect(borderSize, borderSize, borderSize, borderSize, borderSize, borderSize);
+        gc.setFill(Color.BLUE);
+        gc.fillRoundRect(100, 100, 100, 100, 100, 100);
+         /*gc.get
+        
+        
+        
+        final Timeline timeline = new Timeline();
+ timeline.setCycleCount(2);
+ timeline.setAutoReverse(true);
+ timeline.getKeyFrames().add(new KeyFrame(Duration.millis(5000),
+   new KeyValue (gc.getCanvas(), 25)));
+ timeline.play();
+ */
+ 
+ 
+        //gc.fillRect(0,0,(screenWidth - ((borderSize * 3) + groupBoxWidth)), (screenHeight - (2 * borderSize)));*/
         framePanel.getChildren().add(canvas);
-         
-        
-        
-        framePanel.getChildren().add(groupBoxSettings);                         // add groupBox Settings to group
+
         applicationFrame.setScene(frameScene);                                  // add scene to frame
         applicationFrame.show();                                                // show the frame
 

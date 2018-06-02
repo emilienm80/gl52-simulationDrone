@@ -5,7 +5,6 @@
  */
 package simulationdrone;
 
-import graphicInterface.AnimationTimerTest;
 import graphicInterface.Main;
 import javafx.application.Application;
 
@@ -18,9 +17,13 @@ public class SimulationDrone {
     /**
      * @param args the command line arguments
      */
+    /*
+        CODE SOURCE TROUVÉ SUR INTERNET : Classes AnimationTimerTest et AnimatedCircleOnCanvas
+    */
     public static void main(String[] args) {
-        //Application.launch(Main.class);
-        Application.launch(AnimationTimerTest.class);
+        Application.launch(Main.class);
+        //Application.launch(AnimationTimerTest.class);
+        //Application.launch(AnimatedCircleOnCanvas.class);
     }
     
 }
