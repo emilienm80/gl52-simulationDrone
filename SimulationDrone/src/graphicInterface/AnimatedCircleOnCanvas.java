@@ -66,6 +66,4 @@ public class AnimatedCircleOnCanvas extends Application {
         timer.start();
         timeline.play();
     }
-
-    public static void main(String[] args) { launch(args); }
 }  

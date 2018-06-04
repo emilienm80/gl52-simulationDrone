@@ -42,10 +42,20 @@ public class Main extends Application {
     private int SCREEN_HEIGHT = (int) Screen.getPrimary().getVisualBounds().getHeight();
     private int SCREEN_WIDTH = (int) Screen.getPrimary().getVisualBounds().getWidth();
     private int compt;
-    private Group framePanel = new Group();
+    private Group framePanel;
+    private AnimationTimer timer;
+    private Timeline timeline;
     
     @Override
     public void start(Stage applicationFrame) {
+        timer = new AnimationTimer() {
+            @Override
+            public void handle(long l) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        };
+        timeline = new Timeline();
+        framePanel = new Group();
 
         applicationFrame.setTitle("Simulation de drones");                      // name of the window
         Scene frameScene = new Scene(framePanel, Color.WHITESMOKE);             // creation scene with the group and the color
@@ -88,10 +98,12 @@ public class Main extends Application {
     
     
     public void createCanvas(){
+        timer.stop();
+        timeline.stop();
         DoubleProperty x  = new SimpleDoubleProperty();
         DoubleProperty y  = new SimpleDoubleProperty();
-
-        Timeline timeline = new Timeline(
+       
+        timeline = new Timeline(
             new KeyFrame(Duration.seconds(0),
                     new KeyValue(x, 0),
                     new KeyValue(y, 0)
@@ -119,7 +131,8 @@ public class Main extends Application {
         gc.setFill(Color.GREY);
         gc.fillRoundRect(compt, compt, BORDER_FRAME, BORDER_FRAME, BORDER_FRAME, BORDER_FRAME);
         
-        AnimationTimer timer = new AnimationTimer() {
+
+        timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -139,6 +152,5 @@ public class Main extends Application {
         
         timer.start();
         timeline.play();
-        
     }
 }
