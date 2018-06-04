@@ -25,9 +25,9 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import utilities.Constantes;
 
 /**
  *
@@ -35,19 +35,14 @@ import javafx.util.Duration;
  */
 public class Main extends Application {
 
-    private int BORDER_FRAME = 25;
-    private int BORDER_GROUPBOX = 16;
-    private int GROUPBOX_HEIGHT = 500;
-    private int GROUPBOX_WIDTH = 300;
-    private int SCREEN_HEIGHT = (int) Screen.getPrimary().getVisualBounds().getHeight();
-    private int SCREEN_WIDTH = (int) Screen.getPrimary().getVisualBounds().getWidth();
+    private Constantes Const;
     private int compt;
     private Group framePanel;
     private AnimationTimer timer;
     private Timeline timeline;
     
-    @Override
-    public void start(Stage applicationFrame) {
+    private void Initializer(){
+        Const = new Constantes();
         timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
@@ -55,7 +50,12 @@ public class Main extends Application {
             }
         };
         timeline = new Timeline();
-        framePanel = new Group();
+        framePanel = new Group();  
+    }
+    
+    @Override
+    public void start(Stage applicationFrame) {
+        Initializer();
 
         applicationFrame.setTitle("Simulation de drones");                      // name of the window
         Scene frameScene = new Scene(framePanel, Color.WHITESMOKE);             // creation scene with the group and the color
@@ -64,7 +64,7 @@ public class Main extends Application {
 
         BorderPane layoutSettings = new BorderPane();                           // creation layout for groupBox Settings 
 
-        Button btn = new Button("test");
+        Button btn = new Button("Start");
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -74,8 +74,8 @@ public class Main extends Application {
         btn.setPrefWidth(200);
         VBox containerButton = new VBox();
         containerButton.setAlignment(Pos.TOP_CENTER);
-        containerButton.setPadding(new Insets(BORDER_FRAME, 0, 0, 0));
-        containerButton.setSpacing(BORDER_GROUPBOX);
+        containerButton.setPadding(new Insets(Const.BORDER_FRAME, 0, 0, 0));
+        containerButton.setSpacing(Const.BORDER_GROUPBOX);
         containerButton.getChildren().add(new Button("1"));
         containerButton.getChildren().add(new Button("2"));
         containerButton.getChildren().add(btn);
@@ -85,9 +85,9 @@ public class Main extends Application {
         groupBoxSettings.setText("Paramètres");                                 // name of the groupBox Settings
         groupBoxSettings.setContent(layoutSettings);                            // set Layout 
         groupBoxSettings.setCollapsible(false);                                 // remove dynamic top -> bottom
-        groupBoxSettings.setLayoutX(BORDER_FRAME);
-        groupBoxSettings.setLayoutY(BORDER_FRAME);                                // set position of the group box settings
-        groupBoxSettings.setPrefSize(GROUPBOX_WIDTH, GROUPBOX_HEIGHT);            // set size of the groupBox Settings        
+        groupBoxSettings.setLayoutX(Const.BORDER_FRAME);
+        groupBoxSettings.setLayoutY(Const.BORDER_FRAME);                        // set position of the group box settings
+        groupBoxSettings.setPrefSize(Const.GROUPBOX_WIDTH, Const.GROUPBOX_HEIGHT);            // set size of the groupBox Settings        
         framePanel.getChildren().add(groupBoxSettings);                         // add groupBox Settings to group
         
         createCanvas();
@@ -109,8 +109,8 @@ public class Main extends Application {
                     new KeyValue(y, 0)
             ),
             new KeyFrame(Duration.seconds(3),
-                    new KeyValue(x, (SCREEN_WIDTH - ((BORDER_FRAME * 3) + GROUPBOX_WIDTH))),
-                    new KeyValue(y, (SCREEN_HEIGHT - (2 * BORDER_FRAME)))
+                    new KeyValue(x, (Const.SCREEN_WIDTH - ((Const.BORDER_FRAME * 3) + Const.GROUPBOX_WIDTH))),
+                    new KeyValue(y, (Const.SCREEN_HEIGHT - (2 * Const.BORDER_FRAME)))
             )
         );
         timeline.setAutoReverse(true);
@@ -118,32 +118,16 @@ public class Main extends Application {
         
         compt = 100;
         
-        final Canvas canvas = new Canvas((SCREEN_WIDTH - ((BORDER_FRAME * 3) + GROUPBOX_WIDTH)), (SCREEN_HEIGHT - (2 * BORDER_FRAME)));
-        canvas.setTranslateX((BORDER_FRAME * 2) + GROUPBOX_WIDTH);
-        canvas.setTranslateY(BORDER_FRAME);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.setFill(Color.WHITESMOKE);
-        gc.fillRect(0, 0, (SCREEN_WIDTH - ((BORDER_FRAME * 3) + GROUPBOX_WIDTH)), (SCREEN_HEIGHT - (2 * BORDER_FRAME)));
-        gc.setFill(Color.BLUE);
-        gc.fillRect(100,100, BORDER_FRAME, BORDER_FRAME);
-        gc.setFill(Color.RED);
-        gc.fillRect(500, 500, BORDER_FRAME, BORDER_FRAME);
-        gc.setFill(Color.GREY);
-        gc.fillRoundRect(compt, compt, BORDER_FRAME, BORDER_FRAME, BORDER_FRAME, BORDER_FRAME);
+        final Canvas canvas = new Canvas((Const.SCREEN_WIDTH - ((Const.BORDER_FRAME * 3) + Const.GROUPBOX_WIDTH)), (Const.SCREEN_HEIGHT - (2 * Const.BORDER_FRAME)));
+        canvas.setTranslateX((Const.BORDER_FRAME * 2) + Const.GROUPBOX_WIDTH);
+        canvas.setTranslateY(Const.BORDER_FRAME);
+        Draw(canvas.getGraphicsContext2D());
         
 
         timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                GraphicsContext gc = canvas.getGraphicsContext2D();
-                gc.setFill(Color.WHITESMOKE);
-                gc.fillRect(0, 0, (SCREEN_WIDTH - ((BORDER_FRAME * 3) + GROUPBOX_WIDTH)), (SCREEN_HEIGHT - (2 * BORDER_FRAME)));
-                gc.setFill(Color.BLUE);
-                gc.fillRect(100,100, BORDER_FRAME, BORDER_FRAME);
-                gc.setFill(Color.RED);
-                gc.fillRect(500, 500, BORDER_FRAME, BORDER_FRAME);
-                gc.setFill(Color.GREY);
-                gc.fillRoundRect(compt, compt, BORDER_FRAME, BORDER_FRAME, BORDER_FRAME, BORDER_FRAME);
+                Draw(canvas.getGraphicsContext2D());
                 if (compt < 500)
                     ++compt;
             }
@@ -152,5 +136,16 @@ public class Main extends Application {
         
         timer.start();
         timeline.play();
+    }
+    
+    public void Draw(GraphicsContext gc){
+        gc.setFill(Color.WHITESMOKE);
+        gc.fillRect(0, 0, (Const.SCREEN_WIDTH - ((Const.BORDER_FRAME * 3) + Const.GROUPBOX_WIDTH)), (Const.SCREEN_HEIGHT - (2 * Const.BORDER_FRAME)));
+        gc.setFill(Color.BLUE);
+        gc.fillRect(100,100, Const.BORDER_FRAME, Const.BORDER_FRAME);
+        gc.setFill(Color.RED);
+        gc.fillRect(500, 500, Const.BORDER_FRAME, Const.BORDER_FRAME);
+        gc.setFill(Color.GREY);
+        gc.fillRoundRect(compt, compt, Const.BORDER_FRAME, Const.BORDER_FRAME, Const.BORDER_FRAME, Const.BORDER_FRAME);
     }
 }
