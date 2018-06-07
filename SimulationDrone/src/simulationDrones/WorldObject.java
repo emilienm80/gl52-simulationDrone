@@ -40,6 +40,10 @@ public abstract class WorldObject {
 	public Vect3 getSpeed() {
 		return speed;
 	}
+	
+	public void setSpeed(Vect3 speed) {
+		this.speed = speed;
+	}
 
 	public Vect3 getSize() {
 		return size;
