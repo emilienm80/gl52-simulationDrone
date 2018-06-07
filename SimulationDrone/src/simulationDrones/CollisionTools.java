@@ -17,11 +17,11 @@ public class CollisionTools {
 	{
 		//closest point to the sphere belonging to the cuboid
 		Vect3 closestCuboidPoint=new Vect3(
-				limit(s.center.getX(), rc.origin.getX(), rc.origin.getX()+rc.size.getX()), 
-				limit(s.center.getY(), rc.origin.getY(), rc.origin.getY()+rc.size.getY()), 
-				limit(s.center.getZ(), rc.origin.getZ(), rc.origin.getZ()+rc.size.getZ()));
+				limit(s.getCenter().getX(), rc.getOrigin().getX(), rc.getOrigin().getX()+rc.getSize().getX()), 
+				limit(s.getCenter().getY(), rc.getOrigin().getY(), rc.getOrigin().getY()+rc.getSize().getY()), 
+				limit(s.getCenter().getZ(), rc.getOrigin().getZ(), rc.getOrigin().getZ()+rc.getSize().getZ()));
 		
-		return closestCuboidPoint.squaredDist(s.center)<s.radius*s.radius;
+		return closestCuboidPoint.squaredDist(s.getCenter())<s.getRadius()*s.getRadius();
 	}
 	
 	/**
@@ -32,12 +32,13 @@ public class CollisionTools {
 	 */
 	public static boolean intersect(Sphere s1, Sphere s2)
 	{
-		return s1.center.squaredDist(s2.center)<(s1.radius+s2.radius)*(s1.radius+s2.radius);
+		//if the sum of the two sphere radiuses is more than the distance between sphere centers.
+		return s1.getCenter().squaredDist(s2.getCenter())<(s1.getRadius()+s2.getRadius())*(s1.getRadius()+s2.getRadius());
 	}
 	/*
 	public static double getCenterBeforeIntersection(Sphere s1, Sphere s2)
 	{
-		return s1.center.squaredDist(s2.center)<(s1.radius+s2.radius)*(s1.radius+s2.radius);
+		return s1.getCenter().squaredDist(s2.getCenter())<(s1.getRadius()+s2.getRadius())*(s1.getRadius()+s2.getRadius());
 	}
 	*/
 	

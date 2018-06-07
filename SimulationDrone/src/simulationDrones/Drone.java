@@ -2,13 +2,30 @@ package simulationDrones;
 
 public class Drone extends WorldObject /*implements Intelligence*/ {
 
-	private DroneType characteristics;
-	public DroneAI brain;
-	public double batteryLevel;//A.h
-	public double payload;//Kg
-	public double motorThrottle;//%
-	public double motorOutputPower() { return motorConsumption()*characteristics.motorEfficiency; } //W
-	public double motorConsumption() { return motorThrottle*characteristics.motorMaxConsumption; } //W
+	private DroneCharacteristics characteristics;
+	private DroneAI brain;
+	private double batteryLevel;//A.h
+	private double payload;//Kg
+	private double motorThrottle;//%
+	
+	public DroneCharacteristics getCharacteristics() {
+		return characteristics;
+	}
+	public DroneAI getBrain() {
+		return brain;
+	}
+	public double getBatteryLevel() {
+		return batteryLevel;
+	}
+	public double getPayload() {
+		return payload;
+	}
+	public double getMotorThrottle() {
+		return motorThrottle;
+	}
+	
+	public double getMotorOutputPower() { return getMotorConsumption()*characteristics.getMotorEfficiency(); } //W
+	public double getMotorConsumption() { return motorThrottle*characteristics.getMotorMaxConsumption(); } //W
 	
 	
 	public Drone(Drone d)
@@ -37,7 +54,7 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 	
 	public void dischargeBattery(double time)
 	{
-		batteryLevel-=motorConsumption()*time;
+		batteryLevel-=getMotorConsumption()*time;
 		if(batteryLevel<0)
 		{
 			batteryLevel=0;
@@ -46,10 +63,10 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 	
 	public void rechargeBattery(double time)
 	{
-		batteryLevel+=characteristics.batteryRechargingRate*time;
-		if(batteryLevel>characteristics.batteryCapacity)
+		batteryLevel+=characteristics.getBatteryRechargingRate()*time;
+		if(batteryLevel>characteristics.getBatteryCapacity())
 		{
-			batteryLevel=characteristics.batteryCapacity;
+			batteryLevel=characteristics.getBatteryCapacity();
 		}
 	}
 	

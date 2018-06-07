@@ -2,8 +2,8 @@ package simulationDrones;
 
 public class Sphere {
 	
-	public Vect3 center;
-	public double radius;
+	private Vect3 center;
+	private double radius;
 	
 	
 	public Sphere()
@@ -41,4 +41,22 @@ public class Sphere {
 		if(radius<0) radius=0;
 	}
 
+	public Vect3 getCenter() {
+		return center;
+	}
+
+	public void setCenter(Vect3 center) {
+		this.center = center;
+	}
+
+	public double getRadius() {
+		return radius;
+	}
+
+	public void setRadius(double radius) {
+		this.radius = radius;
+	}
+
+	
+	
 }

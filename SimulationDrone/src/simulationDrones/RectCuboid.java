@@ -9,8 +9,8 @@ import java.util.Vector;
  */
 public class RectCuboid {
 
-	public Vect3 origin;
-	public Vect3 size;//dimensions
+	private Vect3 origin;
+	private Vect3 size;//dimensions
 	
 	
 	public RectCuboid()
@@ -51,6 +51,24 @@ public class RectCuboid {
 		if(size.getX()<0) size.setX(0);
 		if(size.getY()<0) size.setY(0);
 		if(size.getZ()<0) size.setZ(0);
+	}
+	
+	
+	
+	public Vect3 getOrigin() {
+		return origin;
+	}
+
+	public void setOrigin(Vect3 origin) {
+		this.origin = origin;
+	}
+
+	public Vect3 getSize() {
+		return size;
+	}
+
+	public void setSize(Vect3 size) {
+		this.size = size;
 	}
 	
 }
