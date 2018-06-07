@@ -19,7 +19,10 @@ public class PhysicsEngine {
 
 			if(w.getClass()==Drone.class)
 			{
-				((Drone)w).brain.decide(map, time);
+				Vect3 goalPosition = w.getNextObjective().getPosition();
+				Vect3 wPosition = w.getPosition();
+				
+				w.setVitesse(w.getBrain().AI.updateVitesse(wPosition, goalPosition, map));
 			}
 		}
 	}
