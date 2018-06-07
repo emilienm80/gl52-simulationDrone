@@ -11,6 +11,12 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 	public double motorConsumption() { return motorThrottle*characteristics.motorMaxConsumption; } //W
 	
 	
+	public DroneAI getBrain() {
+		return brain;
+	}
+	public void setBrain(DroneAI brain) {
+		this.brain = brain;
+	}
 	public Drone(Drone d)
 	{
 		super(d);
@@ -59,6 +65,14 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 	public WorldObject copy() {
 		
 		return new Drone(this);
+	}
+	
+	/**
+	 * TODO
+	 * @return
+	 */
+	public Objective getNextObjective() {
+		return new Objective(1,2);
 	}
 	
 }

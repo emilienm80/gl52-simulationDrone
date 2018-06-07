@@ -7,10 +7,11 @@ package simulationDrones;
  */
 public class Objective {
 
+
 	/**
-	 * 2D Position of the objective
+	 * 3D position of the objective
 	 */
-	private int x,y;
+	private Vect3 position;
 	
 	/**
 	 * Constructor of an objective
@@ -18,25 +19,21 @@ public class Objective {
 	 * @param y coordinate of the objective in the y direction
 	 */
 	public Objective(int x, int y) {
-		this.setX(x);
-		this.setY(y);
+		setPosition(new Vect3(x,y,0));
+	}
+	
+	public Objective(int x, int y, int z) {
+		setPosition(new Vect3(x,y,z));
 	}
 
-	public int getX() {
-		return x;
+	public Vect3 getPosition() {
+		return position;
 	}
 
-	public void setX(int x) {
-		this.x = x;
+	public void setPosition(Vect3 position) {
+		this.position = position;
 	}
-
-	public int getY() {
-		return y;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
+	
 	
 	
 }

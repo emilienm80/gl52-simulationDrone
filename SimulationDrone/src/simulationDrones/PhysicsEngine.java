@@ -17,12 +17,12 @@ public class PhysicsEngine {
 			w.move(time);
 			checkCollisions(w, world);
 
-			if(w.getClass()==Drone.class)
+			if(w instanceof Drone)
 			{
-				Vect3 goalPosition = w.getNextObjective().getPosition();
-				Vect3 wPosition = w.getPosition();
-				
-				w.setVitesse(w.getBrain().AI.updateVitesse(wPosition, goalPosition, map));
+				Drone d = ((Drone) w);
+				Vect3 goalPosition = d.getNextObjective().getPosition();
+				Vect3 wPosition = d.getPosition();
+				w.setSpeed(DroneAI.AI.updateSpeed(wPosition, goalPosition, map));
 			}
 		}
 	}
