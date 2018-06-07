@@ -24,8 +24,8 @@ public class DroneAI {
 		 */
 		public static Vect3 updateSpeed(Vect3 positionDrone, Vect3 goalPosition, Map map) {
 			Vect3 speed = new Vect3(positionDrone.getSubstracted(goalPosition));
-			speed = speed.getNormalized();
-			return speed;
+			
+			return speed.getNormalized();
 		}
 		
 	}
