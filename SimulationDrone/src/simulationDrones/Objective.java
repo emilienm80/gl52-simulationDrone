@@ -8,7 +8,7 @@ package simulationDrones;
 public class Objective {
 
 	/**
-	 * 2D Position of the objectiv
+	 * 2D Position of the objective
 	 */
 	private int x,y;
 	
