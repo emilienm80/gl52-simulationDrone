@@ -34,21 +34,23 @@ public class RectCuboid {
 	
 	public boolean containsPoint(Vect3 p)
 	{
-		Vect3 p2=new Vect3(origin.x+size.x, origin.y+size.y, origin.z+size.z);//the farthest cuboid point from its origin
-		return !( p.x<origin.x || p.x>p2.x || p.y<origin.y || p.y>p2.y || p.z<origin.z || p.z>p2.z);
+		Vect3 p2=new Vect3(origin.getX()+size.getX(), origin.getY()+size.getY(), origin.getZ()+size.getZ());//the farthest cuboid point from its origin
+		return !( 	p.getX()<origin.getX() || p.getX()>p2.getX() || 
+					p.getY()<origin.getY() || p.getY()>p2.getY() || 
+					p.getZ()<origin.getZ() || p.getZ()>p2.getZ());
 	}
 	
 	public double volume()
 	{
-		return size.x*size.y*size.z;
+		return size.getX()*size.getY()*size.getZ();
 	}
 	
 	
 	private void thresholdDims()
 	{
-		if(size.x<0) size.x=0;
-		if(size.y<0) size.y=0;
-		if(size.z<0) size.z=0;
+		if(size.getX()<0) size.setX(0);
+		if(size.getY()<0) size.setY(0);
+		if(size.getZ()<0) size.setZ(0);
 	}
 	
 }

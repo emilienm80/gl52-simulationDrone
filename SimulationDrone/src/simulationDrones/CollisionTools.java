@@ -16,7 +16,10 @@ public class CollisionTools {
 	public static boolean intersect(RectCuboid rc, Sphere s)
 	{
 		//closest point to the sphere belonging to the cuboid
-		Vect3 closestCuboidPoint=new Vect3(limit(s.center.x, rc.origin.x, rc.origin.x+rc.size.x), limit(s.center.y, rc.origin.y, rc.origin.y+rc.size.y), limit(s.center.z, rc.origin.z, rc.origin.z+rc.size.z));
+		Vect3 closestCuboidPoint=new Vect3(
+				limit(s.center.getX(), rc.origin.getX(), rc.origin.getX()+rc.size.getX()), 
+				limit(s.center.getY(), rc.origin.getY(), rc.origin.getY()+rc.size.getY()), 
+				limit(s.center.getZ(), rc.origin.getZ(), rc.origin.getZ()+rc.size.getZ()));
 		
 		return closestCuboidPoint.squaredDist(s.center)<s.radius*s.radius;
 	}

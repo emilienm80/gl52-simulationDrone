@@ -9,13 +9,15 @@ public class Vect3 {
 	
 	private static final Vect3 Default=new Vect3();
 	
-	public double x,y,z;
+	private double x,y,z;
 	
 	public Vect3()
 	{
 		this(0,0,0);
 	}
 	
+	
+
 	public Vect3(double x, double y, double z)
 	{
 		this.x=x;
@@ -101,6 +103,72 @@ public class Vect3 {
 	public Vect3 getSubstracted(Vect3 a)
 	{
 		return new Vect3(x-a.x, y-a.y, z-a.z);
+	}
+	
+	/**
+	 * Multiply this vector by scalar c.
+	 * @param c
+	 * @return this
+	 */
+	public Vect3 multiplyBy(double c)
+	{
+		x*=c;
+		y*=c;
+		z*=c;
+		
+		return this;
+	}
+	
+	/**
+	 * Add a to this vector.
+	 * @param a
+	 * @return this
+	 */
+	public Vect3 add(Vect3 a)
+	{
+		x+=a.x;
+		y+=a.y;
+		z+=a.z;
+		
+		return this;
+	}
+	
+	/**
+	 * Substract a to this vector.
+	 * @param a
+	 * @return this
+	 */
+	public Vect3 substract(Vect3 a)
+	{
+		x-=a.x;
+		y-=a.y;
+		z-=a.z;
+		
+		return this;
+	}
+	
+	public double getX() {
+		return x;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+
+	public double getZ() {
+		return z;
+	}
+
+	public void setZ(double z) {
+		this.z = z;
 	}
 
 }

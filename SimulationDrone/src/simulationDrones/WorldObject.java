@@ -2,12 +2,12 @@ package simulationDrones;
 
 public abstract class WorldObject {
 	
-	public Vect3 position;//center of the bounding box
-	public Vect3 speed;
+	private Vect3 position;//center of the bounding box
+	private Vect3 speed;
 	//public Collider collidingBox;
-	public Vect3 size;
+	private Vect3 size;
 	
-	
+
 	public WorldObject() {
 		position=new Vect3();
 		speed=new Vect3();
@@ -30,5 +30,19 @@ public abstract class WorldObject {
 	}
 	
 	public abstract WorldObject copy();
+	
+	
+	//getters/setters
+	public Vect3 getPosition() {
+		return position;
+	}
+
+	public Vect3 getSpeed() {
+		return speed;
+	}
+
+	public Vect3 getSize() {
+		return size;
+	}
 
 }
