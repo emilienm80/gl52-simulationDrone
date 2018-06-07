@@ -4,16 +4,14 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 
 	private DroneCharacteristics characteristics;
 	private DroneAI brain;
-	private double batteryLevel;//A.h
+	private double batteryLevel;//W.h=Joules/3600
 	private double payload;//Kg
 	private double motorThrottle;//%
 	
 	public DroneCharacteristics getCharacteristics() {
 		return characteristics;
 	}
-	public DroneAI getBrain() {
-		return brain;
-	}
+
 	public double getBatteryLevel() {
 		return batteryLevel;
 	}
@@ -39,7 +37,7 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 		super(d);
 		
 		characteristics=d.characteristics;
-		//brain=d.brain;
+		//brain=d.brain;TODO
 		batteryLevel=d.batteryLevel;
 		payload=d.payload;
 		motorThrottle=d.motorThrottle;
