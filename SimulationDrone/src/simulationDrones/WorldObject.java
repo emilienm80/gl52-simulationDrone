@@ -2,11 +2,9 @@ package simulationDrones;
 
 public abstract class WorldObject {
 	
-	private Vect3 position;//center of the bounding box
-	private Vect3 speed;
-	//public Collider collidingBox;
-	private Vect3 size;
-	
+	protected Vect3 position;//center of the bounding box
+	protected Vect3 speed;
+	protected Vect3 size;//for a sphere this is the diameter	
 
 	public WorldObject() {
 		position=new Vect3();
@@ -21,12 +19,20 @@ public abstract class WorldObject {
 		size=new Vect3(w.size);
 	}
 	
+	//
+	///**
+	// * returns a new collider (sphere or cuboid) specific to this class.
+	// * @return
+	// */
+	//protected abstract Collider getSpecificCollider();
 	
-	public abstract void collideWith(WorldObject w);
+	public abstract boolean collideWith(WorldObject w);
+	
+	//public abstract void applyCollision(WorldObject w);
 	
 	public void move(double time)
 	{
-		position=position.getSubstracted(speed.getMultipliedBy(time));//position-=speed*time
+		position=position.getAdded(speed.getMultipliedBy(time));//position+=speed*time
 	}
 	
 	public abstract WorldObject copy();
@@ -48,5 +54,11 @@ public abstract class WorldObject {
 	public Vect3 getSize() {
 		return size;
 	}
+	
+	/**
+	 * compute and returns specific collider
+	 * @return
+	 */
+	public abstract Collider getCollider();
 
 }

@@ -1,5 +1,7 @@
 package simulationDrones;
 
+import java.util.ArrayList;
+
 /**
  * Class intended to represent either a 3D point or vector.
  * <br>
@@ -28,6 +30,18 @@ public class Vect3 {
 	public Vect3(Vect3 v)
 	{
 		this(v.x,v.y,v.z);
+	}
+	
+	/**
+	 * Creates the vector AB from two points A and B.
+	 * @param a
+	 * @param b
+	 */
+	public Vect3(Vect3 a, Vect3 b)
+	{
+		x=b.x-a.x;
+		y=b.y-a.y;
+		z=b.z-a.z;
 	}
 	
 	/**
@@ -74,6 +88,29 @@ public class Vect3 {
 		return this.getMultipliedBy(1/this.norm());
 	}
 	
+	/**
+	 * Normalize this vector
+	 * @return itself
+	 */
+	public Vect3 Normalize()
+	{
+		return this.multiplyBy(1/this.norm());
+	}
+	
+	public Vect3 reverse()
+	{
+		x=-x;
+		y=-y;
+		z=-z;
+		
+		return this;
+	}
+	
+	public Vect3 getReversed()
+	{
+		return new Vect3(-x,-y,-z);
+	}
+	
 	
 	/**
 	 * Merci la surcharge d'opérateurs !
@@ -83,6 +120,16 @@ public class Vect3 {
 	public Vect3 getMultipliedBy(double c)
 	{
 		return new Vect3(x*c, y*c, z*c);
+	}
+	
+	/**
+	 * Multiply pairs of coordinates (x*x,y*y,z*z)
+	 * @param v
+	 * @return new multiplied vector
+	 */
+	public Vect3 getMultipliedBy(Vect3 v)
+	{
+		return new Vect3(x*v.x, y*v.y, z*v.z);
 	}
 	
 	/**
@@ -120,6 +167,20 @@ public class Vect3 {
 	}
 	
 	/**
+	 * Multiply pairs of coordinates (x*x,y*y,z*z)
+	 * @param v
+	 * @return this
+	 */
+	public Vect3 multiplyBy(Vect3 v)
+	{
+		x*=v.x;
+		y*=v.y;
+		z*=v.z;
+		
+		return this;
+	}
+	
+	/**
 	 * Add a to this vector.
 	 * @param a
 	 * @return this
@@ -146,6 +207,32 @@ public class Vect3 {
 		
 		return this;
 	}
+	
+	/**
+	 * 
+	 * @param p
+	 * @param lp
+	 * @return from the list of points lp, returns the closest point to this one.
+	 * Returns null if arraylist is empty.
+	 */
+	public Vect3 getClosestPoint(ArrayList<Vect3> lp)
+	{
+		double mindist=Double.MAX_VALUE;
+		Vect3 res=null;
+		for(Vect3 p : lp)
+		{
+			double d=this.squaredDist(p);
+			if(d<mindist)
+			{
+				mindist=d;
+				res=p;
+			}
+		}
+		
+		return res;
+	}
+	
+	
 	
 	public double getX() {
 		return x;

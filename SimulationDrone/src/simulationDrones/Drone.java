@@ -1,7 +1,10 @@
 package simulationDrones;
 
+import org.w3c.dom.css.Rect;
+
 public class Drone extends WorldObject /*implements Intelligence*/ {
 
+	private Sphere collidingBox;
 	private DroneCharacteristics characteristics;
 	private DroneAI brain;
 	private double batteryLevel;//W.h=Joules/3600
@@ -32,6 +35,7 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 	public void setBrain(DroneAI brain) {
 		this.brain = brain;
 	}
+	
 	public Drone(Drone d)
 	{
 		super(d);
@@ -41,13 +45,28 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 		batteryLevel=d.batteryLevel;
 		payload=d.payload;
 		motorThrottle=d.motorThrottle;
+		
+		collidingBox=new Sphere(position, characteristics.getRadius());
 	}
 	
 	
+	
 	@Override
-	public void collideWith(WorldObject w) {
-		// TODO Auto-generated method stub
+	public boolean collideWith(WorldObject w) {
+		// TODO compute new position in this function
 		
+		Collider wc=w.getCollider();
+		
+		if(wc.getClass()==Sphere.class)
+		{
+			return CollisionTools.intersect((Sphere)this.getCollider(), (Sphere)wc);
+		}
+		else if(wc.getClass()==RectCuboid.class)
+		{
+			return CollisionTools.intersect((RectCuboid)wc, (Sphere)this.getCollider());
+		}
+		
+		return false;
 	}
 
 	@Override
@@ -89,5 +108,12 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 	public Objective getNextObjective() {
 		return new Objective(1,2);
 	}
+
+	@Override
+	public Collider getCollider() {
+		collidingBox.setCenter(position);
+		return collidingBox;
+	}
+
 	
 }

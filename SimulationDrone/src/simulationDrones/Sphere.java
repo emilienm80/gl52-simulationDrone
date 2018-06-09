@@ -1,6 +1,6 @@
 package simulationDrones;
 
-public class Sphere {
+public class Sphere extends Collider {
 	
 	private Vect3 center;
 	private double radius;
