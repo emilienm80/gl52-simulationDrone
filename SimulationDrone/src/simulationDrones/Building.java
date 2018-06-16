@@ -5,6 +5,8 @@ public class Building extends WorldObject {
 	private RectCuboid collidingBox;
 	private Station droneStation;
 	
+	private String name;
+	
 	public Building()
 	{
 		super();
@@ -20,10 +22,11 @@ public class Building extends WorldObject {
 	 * @param collidingBox the colliding box that surrounds the building
 	 * @param droneStation the drone station installed on top of the building
 	 */
-	public Building(Vect3 position, Vect3 speed, Vect3 size, RectCuboid collidingBox, Station droneStation) {
+	public Building(Vect3 position, Vect3 speed, Vect3 size, RectCuboid collidingBox, Station droneStation, String name) {
 		super(position, speed, size);
 		this.collidingBox = collidingBox;
 		this.droneStation = droneStation;
+		this.name = name;
 	}
 	
 	//deep copy
