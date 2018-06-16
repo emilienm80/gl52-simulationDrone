@@ -22,7 +22,7 @@ public class PhysicsEngine {
 				Drone d = ((Drone) w);
 				Vect3 goalPosition = d.getNextObjective().getPosition();
 				Vect3 wPosition = d.getPosition();
-				w.setSpeed(DroneAI.AI.updateSpeed(wPosition, goalPosition, map));
+				w.setSpeed(DroneAI.AI.updateSpeed(d, goalPosition, map));
 			}
 		}
 	}
