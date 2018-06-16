@@ -140,4 +140,16 @@ public class Map {
     	
     	return res;
     }
+    
+    public ArrayList<Drone> getDrone() {
+        ArrayList<Drone> res = new ArrayList<Drone>();
+
+        for (WorldObject temp : environment) {
+            if (temp instanceof Drone) {
+            	res.add((Drone) temp);
+            }
+        }
+
+        return res;
+    }
 }

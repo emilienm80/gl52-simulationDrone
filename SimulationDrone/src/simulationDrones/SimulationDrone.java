@@ -256,6 +256,14 @@ public class SimulationDrone extends Application {
             }
 
         }
+        
+        ArrayList<Drone> drones = map.getDrone();
+        for(Drone drone : drones) {
+        	gc.setFill(Color.web("#121212"));
+        	double width = drone.getCharacteristics().getRadius();
+        	System.out.println(drone.getPosition().getX()+" "+drone.getPosition().getY()+" "+ width+" "+width);
+        	gc.fillOval(drone.getPosition().getX(), drone.getPosition().getY(), width, width);
+        }
         /*
         gc.setFill(Color.BLUE);
         gc.fillRect(100, 100, Const.BORDER_FRAME, Const.BORDER_FRAME);
