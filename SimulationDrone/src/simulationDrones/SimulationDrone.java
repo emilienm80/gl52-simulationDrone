@@ -60,6 +60,8 @@ public class SimulationDrone extends Application {
         };
         timeline = new Timeline();
         framePanel = new Group();
+        System.out.println(Const.CANVAS_HEIGHT);
+        System.out.println(Const.CANVAS_WIDTH);
     }
 
     @Override
