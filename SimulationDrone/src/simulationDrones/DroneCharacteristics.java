@@ -17,7 +17,7 @@ public class DroneCharacteristics {
 	
 	public DroneCharacteristics()
 	{
-		this(DroneType.standard);
+		this(DroneType.Standard);
 	}
 
 	public DroneCharacteristics(DroneType dt)
@@ -28,7 +28,7 @@ public class DroneCharacteristics {
 	public void setCharacteristics(DroneType dt)
 	{
 		switch (dt) {
-	        case mini://based on Parrot Mambo
+	        case Mini://based on Parrot Mambo
 	        	maxSpeed=4.2;
 	        	maneuverability=new Vect3(1,1,1);
 	        	radius=0.09;
@@ -42,7 +42,7 @@ public class DroneCharacteristics {
 	        	batteryRechargingRate=4.4;//30 min charging time
 	        	communicationRange=20;
 	            break;
-	        case standard://based on DJI Spark
+	        case Standard://based on DJI Spark
 	            maxSpeed=12;
 	        	maneuverability=new Vect3(1,1,1);
 	        	radius=0.11;
@@ -56,7 +56,7 @@ public class DroneCharacteristics {
 	        	batteryRechargingRate=29;
 	        	communicationRange=100;
 	        	break;
-	        /*case pro://based on YUNEEC H520
+	        /*case Pro://based on YUNEEC H520
 	        	maxHSpeed=;
 	        	maxUpSpeed=;
 	            maxDownSpeed=;
@@ -71,7 +71,7 @@ public class DroneCharacteristics {
 	        	batteryRechargingRate=;
 	        	communicationRange=;
 	            break;*/
-	        case transporter://based on DJI S900
+	        case Transporter://based on DJI S900
 	            maxSpeed=16;
 	        	maneuverability=new Vect3(1,1,1);
 	        	radius=0.5;

@@ -2,9 +2,9 @@ package simulationDrones;
 
 public enum DroneType {
 	
-	standard,
-	mini,
-	pro,
-	transporter;
+	Standard,
+	Mini,
+	Pro,
+	Transporter;
 
 }

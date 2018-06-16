@@ -23,7 +23,7 @@ public class Mission {
 	 * Default constructor, priority set to low, and no objectives
 	 */
 	public Mission() {
-		setPriority(Priority.low);
+		setPriority(Priority.Low);
 		setObjectives(new ArrayList<Objective>());
 	}
 	
