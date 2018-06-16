@@ -220,9 +220,14 @@ public class SimulationDrone extends Application {
     public void Draw(GraphicsContext gc) {
         gc.setFill(Color.web("#d5d5d5"));
         gc.fillRect(0, 0, Const.CANVAS_WIDTH, Const.CANVAS_HEIGHT);
-        gc.setFill(Color.web("#888888"));
         for (Building building : buildings) {
+            gc.setFill(Color.web("#888888"));
             gc.fillRect(building.getPosition().getX(), building.getPosition().getY(), building.getSize().getX(), building.getSize().getY());
+            if (building.getStation() != null){
+                gc.setFill(Color.WHITE);
+                gc.fillRect(building.getStation().getPosition().getX(), building.getStation().getPosition().getY(), building.getStation().getSize().getX(), building.getStation().getSize().getY());                
+            }
+
         }
         /*
         gc.setFill(Color.BLUE);
