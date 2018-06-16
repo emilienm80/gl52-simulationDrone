@@ -18,12 +18,14 @@ public class Constantes {
     public int GROUPBOX_WIDTH;
     public int SCREEN_HEIGHT;
     public int SCREEN_WIDTH;
+    public int FORM_SIZE;
     
     public Constantes(){ 
         BORDER_FRAME = 25;
         BORDER_GROUPBOX = 16;
-        GROUPBOX_HEIGHT = 500;
+        GROUPBOX_HEIGHT = 700;
         GROUPBOX_WIDTH = 300;
+        FORM_SIZE = 200;
         SCREEN_HEIGHT = (int) Screen.getPrimary().getVisualBounds().getHeight();
         SCREEN_WIDTH = (int) Screen.getPrimary().getVisualBounds().getWidth();
     }

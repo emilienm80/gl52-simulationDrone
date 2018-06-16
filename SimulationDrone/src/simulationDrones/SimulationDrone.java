@@ -21,6 +21,9 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -40,7 +43,7 @@ public class SimulationDrone extends Application {
     private Group framePanel;
     private AnimationTimer timer;
     private Timeline timeline;
-    private boolean isPaused = false;
+    private Map map;
 
     private void Initializer() {
         Const = new Constantes();
@@ -69,12 +72,7 @@ public class SimulationDrone extends Application {
         start.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                if (!(isPaused)) {
-                    createCanvas();
-                } else {
-                    timer.notify();
-                    timeline.notify();
-                }
+                createCanvas();
             }
         });
 
@@ -86,9 +84,45 @@ public class SimulationDrone extends Application {
                 timeline.stop();
             }
         });
-
-        start.setPrefWidth(200);
-        stop.setPrefWidth(200);
+        
+        ComboBox<DroneType> typeDrone = new ComboBox<>();
+        typeDrone.getItems().setAll(DroneType.values());
+        typeDrone.getSelectionModel().select(DroneType.Mini);
+        
+        
+        ComboBox<WorldObject> from = new ComboBox<>();
+        //from.getItems().setAll();
+        //from.getSelectionModel().select();
+        
+        ComboBox<WorldObject> to = new ComboBox<>();
+        //to.getItems().setAll();
+        //to.getSelectionModel().select();
+        
+        
+        ComboBox<Priority> priority = new ComboBox<>();
+        priority.getItems().setAll(Priority.values());
+        priority.getSelectionModel().select(Priority.Low);
+        
+        ComboBox<MissionType> typeMission = new ComboBox<>();
+        typeMission.getItems().setAll(MissionType.values());
+        typeMission.getSelectionModel().select(MissionType.Move);
+        
+        Button create = new Button("Create");
+        create.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                // create drone
+            }
+        });
+        
+        start.setPrefWidth(Const.FORM_SIZE);
+        stop.setPrefWidth(Const.FORM_SIZE);
+        typeDrone.setPrefWidth(Const.FORM_SIZE);
+        priority.setPrefWidth(Const.FORM_SIZE);
+        typeMission.setPrefWidth(Const.FORM_SIZE);
+        from.setPrefWidth(Const.FORM_SIZE);
+        to.setPrefWidth(Const.FORM_SIZE);
+        create.setPrefWidth(Const.FORM_SIZE);
 
         VBox containerButton = new VBox();
 
@@ -99,7 +133,19 @@ public class SimulationDrone extends Application {
 
         containerButton.getChildren().add(start);
         containerButton.getChildren().add(stop);
-
+        containerButton.getChildren().add(new Separator());
+        containerButton.getChildren().add(new Label("Drone Type"));
+        containerButton.getChildren().add(typeDrone);
+        containerButton.getChildren().add(new Label("Priority"));
+        containerButton.getChildren().add(priority);
+        containerButton.getChildren().add(new Label("Mission Type"));
+        containerButton.getChildren().add(typeMission);
+        containerButton.getChildren().add(new Label("From"));
+        containerButton.getChildren().add(from);
+        containerButton.getChildren().add(new Label("To"));
+        containerButton.getChildren().add(to);
+        containerButton.getChildren().add(create);
+        
         layoutSettings.setCenter(containerButton);
 
         TitledPane groupBoxSettings = new TitledPane();                         // creation groupBox Settings
