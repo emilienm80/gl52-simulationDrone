@@ -46,7 +46,6 @@ public class SimulationDrone extends Application {
     private Timeline timeline;
     private Map map;
     private ArrayList<Building> buildings;
-    private Color colors[] = {Color.BLUE, Color.RED, Color.GREEN, Color.ORANGE, Color.VIOLET, Color.PINK, Color.CYAN, Color.BROWN, Color.MAGENTA, Color.SALMON};
 
     private void Initializer() {
         Const = new Constantes();
@@ -60,8 +59,6 @@ public class SimulationDrone extends Application {
         };
         timeline = new Timeline();
         framePanel = new Group();
-        System.out.println(Const.CANVAS_HEIGHT);
-        System.out.println(Const.CANVAS_WIDTH);
     }
 
     @Override
@@ -221,13 +218,11 @@ public class SimulationDrone extends Application {
     }
 
     public void Draw(GraphicsContext gc) {
-        int nb = 0;
-        gc.setFill(Color.WHITESMOKE);
+        gc.setFill(Color.web("#d5d5d5"));
         gc.fillRect(0, 0, Const.CANVAS_WIDTH, Const.CANVAS_HEIGHT);
+        gc.setFill(Color.web("#888888"));
         for (Building building : buildings) {
-            gc.setFill(colors[nb%10]);
             gc.fillRect(building.getPosition().getX(), building.getPosition().getY(), building.getSize().getX(), building.getSize().getY());
-            ++nb;
         }
         /*
         gc.setFill(Color.BLUE);
