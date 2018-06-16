@@ -30,7 +30,11 @@ public class DroneAI {
 			
 			Collider nextCollider = new Sphere(nextPosition, drone.getCharacteristics().getRadius());
 			
-			map.testCollision(nextCollider);
+			
+			//TODO make drones talk.
+			if(map.testCollision(nextCollider).size() > 0) {
+				speed = new Vect3(0,0,0);
+			}
 			
 			return speed.getNormalized();
 		}
