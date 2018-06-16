@@ -192,8 +192,8 @@ public class SimulationDrone extends Application {
                         new KeyValue(y, 0)
                 ),
                 new KeyFrame(Duration.seconds(3),
-                        new KeyValue(x, (Const.SCREEN_WIDTH - ((Const.BORDER_FRAME * 3) + Const.GROUPBOX_WIDTH))),
-                        new KeyValue(y, (Const.SCREEN_HEIGHT - (2 * Const.BORDER_FRAME)))
+                        new KeyValue(x, Const.CANVAS_WIDTH),
+                        new KeyValue(y, Const.CANVAS_HEIGHT)
                 )
         );
         timeline.setAutoReverse(true);
@@ -201,7 +201,7 @@ public class SimulationDrone extends Application {
 
         compt = 100;
 
-        final Canvas canvas = new Canvas((Const.SCREEN_WIDTH - ((Const.BORDER_FRAME * 3) + Const.GROUPBOX_WIDTH)), (Const.SCREEN_HEIGHT - (2 * Const.BORDER_FRAME)));
+        final Canvas canvas = new Canvas(Const.CANVAS_WIDTH, Const.CANVAS_HEIGHT);
         canvas.setTranslateX((Const.BORDER_FRAME * 2) + Const.GROUPBOX_WIDTH);
         canvas.setTranslateY(Const.BORDER_FRAME);
         Draw(canvas.getGraphicsContext2D());
@@ -221,7 +221,7 @@ public class SimulationDrone extends Application {
     public void Draw(GraphicsContext gc) {
         int nb = 0;
         gc.setFill(Color.WHITESMOKE);
-        gc.fillRect(0, 0, (Const.SCREEN_WIDTH - ((Const.BORDER_FRAME * 3) + Const.GROUPBOX_WIDTH)), (Const.SCREEN_HEIGHT - (2 * Const.BORDER_FRAME)));
+        gc.fillRect(0, 0, Const.CANVAS_WIDTH, Const.CANVAS_HEIGHT);
         for (Building building : buildings) {
             gc.setFill(colors[nb%10]);
             gc.fillRect(building.getPosition().getX(), building.getPosition().getY(), building.getSize().getX(), building.getSize().getY());

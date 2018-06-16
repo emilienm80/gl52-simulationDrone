@@ -19,6 +19,8 @@ public class Constantes {
     public int SCREEN_HEIGHT;
     public int SCREEN_WIDTH;
     public int FORM_SIZE;
+    public int CANVAS_HEIGHT;
+    public int CANVAS_WIDTH;
     
     public Constantes(){ 
         BORDER_FRAME = 25;
@@ -28,6 +30,9 @@ public class Constantes {
         FORM_SIZE = 200;
         SCREEN_HEIGHT = (int) Screen.getPrimary().getVisualBounds().getHeight();
         SCREEN_WIDTH = (int) Screen.getPrimary().getVisualBounds().getWidth();
+        
+        CANVAS_HEIGHT = SCREEN_HEIGHT - (2 * BORDER_FRAME);
+        CANVAS_WIDTH = SCREEN_WIDTH - ((BORDER_FRAME * 3) + GROUPBOX_WIDTH);
     }
     
     
