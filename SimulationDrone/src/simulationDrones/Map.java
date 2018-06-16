@@ -10,4 +10,8 @@ public class Map {
 	private ArrayList<WorldObject> environment=new ArrayList<WorldObject>(); //buildings, stations and everything
 	
 	
+	public Map() {
+		limitsbox = new RectCuboid( new Vect3(0,0,0), new Vect3(500,500,500) );
+	}
+	
 }

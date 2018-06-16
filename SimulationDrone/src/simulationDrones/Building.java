@@ -11,6 +11,21 @@ public class Building extends WorldObject {
 		collidingBox=new RectCuboid(position, size);
 	}
 	
+	
+	/**
+	 * Actually useful constructor, thx francis
+	 * @param position the vect3 representation of the position of the building
+	 * @param speed the vect3 representation of the speed of the building (hopefully 0 0 0)
+	 * @param size the vect3 representation of the size of the building
+	 * @param collidingBox the colliding box that surrounds the building
+	 * @param droneStation the drone station installed on top of the building
+	 */
+	public Building(Vect3 position, Vect3 speed, Vect3 size, RectCuboid collidingBox, Station droneStation) {
+		super(position, speed, size);
+		this.collidingBox = collidingBox;
+		this.droneStation = droneStation;
+	}
+	
 	//deep copy
 	public Building(Building b)
 	{

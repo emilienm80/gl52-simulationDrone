@@ -12,6 +12,12 @@ public abstract class WorldObject {
 		size=new Vect3();
 	}
 	
+	public WorldObject(Vect3 position, Vect3 speed, Vect3 size) {
+		this.position = position;
+		this.speed = speed;
+		this.size = size;
+	}
+	
 	//we want a deep copy
 	public WorldObject(WorldObject w) {
 		position=new Vect3(w.position);
