@@ -6,8 +6,8 @@ package simulationDrones;
  *
  */
 public enum Priority {
-	highest,
-	high,
-	medium,
-	low;
+	Highest,
+	High,
+	Medium,
+	Low;
 }
