@@ -45,10 +45,13 @@ public class SimulationDrone extends Application {
     private AnimationTimer timer;
     private Timeline timeline;
     private Map map;
+    private ArrayList<Building> buildings;
+    private Color colors[] = {Color.BLUE, Color.RED, Color.GREEN, Color.ORANGE, Color.VIOLET, Color.PINK, Color.CYAN, Color.BROWN, Color.MAGENTA, Color.SALMON};
 
     private void Initializer() {
         Const = new Constantes();
         map = new Map();
+        buildings = map.getBuilding();
         timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
@@ -75,6 +78,8 @@ public class SimulationDrone extends Application {
             @Override
             public void handle(ActionEvent e) {
                 createCanvas();
+                timer.start();
+                timeline.play();
             }
         });
 
@@ -86,33 +91,33 @@ public class SimulationDrone extends Application {
                 timeline.stop();
             }
         });
-        
+
         ComboBox<DroneType> typeDrone = new ComboBox<>();
         typeDrone.getItems().setAll(DroneType.values());
         typeDrone.getSelectionModel().select(DroneType.Mini);
-               
+
         ComboBox<String> from = new ComboBox<>();
-        
+
         ComboBox<String> to = new ComboBox<>();
-        
-        ArrayList<Building> buildings = map.getBuildingWithStation();
-        
-        for(Building building : buildings){
+
+        ArrayList<Building> buildingstation = map.getBuildingWithStation();
+
+        for (Building building : buildingstation) {
             from.getItems().add(building.getName());
             to.getItems().add(building.getName());
         }
 
         from.getSelectionModel().select(0);
         to.getSelectionModel().select(1);
-                
+
         ComboBox<Priority> priority = new ComboBox<>();
         priority.getItems().setAll(Priority.values());
         priority.getSelectionModel().select(Priority.Low);
-        
+
         ComboBox<MissionType> typeMission = new ComboBox<>();
         typeMission.getItems().setAll(MissionType.values());
         typeMission.getSelectionModel().select(MissionType.Move);
-        
+
         Button create = new Button("Create");
         create.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -120,7 +125,7 @@ public class SimulationDrone extends Application {
                 // create drone
             }
         });
-        
+
         start.setPrefWidth(Const.FORM_SIZE);
         stop.setPrefWidth(Const.FORM_SIZE);
         typeDrone.setPrefWidth(Const.FORM_SIZE);
@@ -151,7 +156,7 @@ public class SimulationDrone extends Application {
         containerButton.getChildren().add(new Label("To"));
         containerButton.getChildren().add(to);
         containerButton.getChildren().add(create);
-        
+
         layoutSettings.setCenter(containerButton);
 
         TitledPane groupBoxSettings = new TitledPane();                         // creation groupBox Settings
@@ -205,26 +210,30 @@ public class SimulationDrone extends Application {
             @Override
             public void handle(long now) {
                 Draw(canvas.getGraphicsContext2D());
-                if (compt < 500) {
+                /*if (compt < 500) {
                     ++compt;
-                }
+                }*/
             }
         };
         framePanel.getChildren().add(canvas);
-
-        timer.start();
-        timeline.play();
     }
 
     public void Draw(GraphicsContext gc) {
+        int nb = 0;
         gc.setFill(Color.WHITESMOKE);
         gc.fillRect(0, 0, (Const.SCREEN_WIDTH - ((Const.BORDER_FRAME * 3) + Const.GROUPBOX_WIDTH)), (Const.SCREEN_HEIGHT - (2 * Const.BORDER_FRAME)));
+        for (Building building : buildings) {
+            gc.setFill(colors[nb%10]);
+            gc.fillRect(building.getPosition().getX(), building.getPosition().getY(), building.getSize().getX(), building.getSize().getY());
+            ++nb;
+        }
+        /*
         gc.setFill(Color.BLUE);
         gc.fillRect(100, 100, Const.BORDER_FRAME, Const.BORDER_FRAME);
         gc.setFill(Color.RED);
         gc.fillRect(500, 500, Const.BORDER_FRAME, Const.BORDER_FRAME);
         gc.setFill(Color.GREY);
-        gc.fillRoundRect(compt, compt, Const.BORDER_FRAME, Const.BORDER_FRAME, Const.BORDER_FRAME, Const.BORDER_FRAME);
+        gc.fillRoundRect(compt, compt, Const.BORDER_FRAME, Const.BORDER_FRAME, Const.BORDER_FRAME, Const.BORDER_FRAME);*/
     }
 
 }
