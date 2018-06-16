@@ -12,6 +12,12 @@ public abstract class WorldObject {
 		size=new Vect3();
 	}
 	
+	/**
+	 * Actually useful constructor, thx Francis
+	 * @param position
+	 * @param speed
+	 * @param size
+	 */
 	public WorldObject(Vect3 position, Vect3 speed, Vect3 size) {
 		this.position = position;
 		this.speed = speed;

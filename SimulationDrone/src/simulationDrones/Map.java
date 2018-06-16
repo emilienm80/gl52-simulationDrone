@@ -15,10 +15,10 @@ public class Map {
 		
 		for(int i = 0; i < 5; i++) {
 			
-			//position, speed, size, colidingbox, station;//
-			Vect3 position = new Vect3(i*10,i*10,i*10);
+			//Generates dumb dumb dumb basic map
+			Vect3 position = new Vect3(i*50,i*50,i*50);
 			Vect3 speed = new Vect3(0,0,0);
-			Vect3 size = new Vect3(5,5,5);
+			Vect3 size = new Vect3(10,10,10);
 			
 			RectCuboid cb = new RectCuboid(position, size);
 			Station station = null;
