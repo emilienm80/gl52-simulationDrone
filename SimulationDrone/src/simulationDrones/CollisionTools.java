@@ -69,6 +69,31 @@ public class CollisionTools {
 	}
 	
 	/**
+	 * General instersect
+	 * @param c1 first collider
+	 * @param c2 second collider
+	 * @return true if collision
+	 */
+	public static boolean interesect(Collider c1, Collider c2) {
+		boolean res = false;
+		
+		if(c1 instanceof Sphere) {
+			if(c2 instanceof Sphere) {
+				res = intersect((Sphere) c1, (Sphere) c2);
+			}else if(c2 instanceof RectCuboid) {
+				res = intersect((RectCuboid) c1, (Sphere) c2);
+			}
+		}else if(c1 instanceof RectCuboid) {
+			if(c2 instanceof Sphere) {
+				res = intersect((RectCuboid) c1, (Sphere) c2);
+			}else if(c2 instanceof RectCuboid) {
+				res = intersect((RectCuboid) c1, (RectCuboid) c2);
+			}
+		}
+		return res;
+	}
+	
+	/**
 	 * For collision between a moving sphere and a stationary cuboid.
 	 * Should be used only if the collision has been successfully tested beforehand. Otherwise, behavior is UNDEFINED (Oh shit !), which means that the resulting sphere center could be anywhere but where you'd expect it.
 	 * @param s1
@@ -197,4 +222,5 @@ public class CollisionTools {
 	{
 		return Math.min(Math.max(min, v), max);
 	}
+	
 }
