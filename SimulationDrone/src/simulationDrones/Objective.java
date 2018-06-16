@@ -25,6 +25,10 @@ public class Objective {
 	public Objective(int x, int y, int z) {
 		setPosition(new Vect3(x,y,z));
 	}
+	
+	public Objective(Vect3 pos) {
+		this.position = pos;
+	}
 
 	public Vect3 getPosition() {
 		return position;

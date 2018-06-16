@@ -11,6 +11,8 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 	private double payload;//Kg
 	private double motorThrottle;//%
 	
+	private Mission mission;
+	
 	public DroneCharacteristics getCharacteristics() {
 		return characteristics;
 	}
@@ -34,6 +36,28 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 	}
 	public void setBrain(DroneAI brain) {
 		this.brain = brain;
+	}
+	
+	/**
+	 * Default constructor
+	 * @param colliding
+	 * @param dc
+	 * @param batteryLevel
+	 * @param payload
+	 * @param motorThrottle
+	 */
+	public Drone(Vect3 position, Vect3 speed, Vect3 size, Sphere colliding, DroneCharacteristics dc, 
+					double batteryLevel, double payload, double motorThrottle, Mission mission) {
+		super(position, speed, size);
+		
+		this.collidingBox = colliding;
+		this.characteristics = dc;
+		this.brain = null;
+		this.batteryLevel = batteryLevel;
+		this.payload = payload;
+		this.motorThrottle = motorThrottle;
+		
+		this.mission = mission;
 	}
 	
 	public Drone(Drone d)
