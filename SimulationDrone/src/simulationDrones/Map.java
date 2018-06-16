@@ -36,7 +36,23 @@ public class Map {
 	 * Returns all buildings with stations on top
 	 * @return
 	 */
-	ArrayList<Building> getBuildingWithStation(){
+	public ArrayList<Building> getBuilding(){
+		ArrayList<Building> res = new ArrayList<Building>();
+		
+		for(WorldObject temp : environment) {
+			if(temp instanceof Building) {
+				res.add( (Building) temp);
+			}
+		}
+		
+		return res;
+	}
+	
+	/**
+	 * Returns all buildings with stations on top
+	 * @return
+	 */
+	public ArrayList<Building> getBuildingWithStation(){
 		ArrayList<Building> res = new ArrayList<Building>();
 		
 		for(WorldObject temp : environment) {
@@ -52,4 +68,19 @@ public class Map {
 		return res;
 	}
 	
+	
+	public ArrayList<WorldObject> testCollision(Collider c1) {
+		ArrayList<WorldObject> res = new ArrayList<WorldObject>();
+		
+		for(WorldObject temp : environment) {
+			Collider c2 = temp.getCollider();
+			
+			if(CollisionTools.interesect(c1, c2)) {
+				res.add(temp);
+			}
+			
+		}
+		
+		return res;
+	}
 }
