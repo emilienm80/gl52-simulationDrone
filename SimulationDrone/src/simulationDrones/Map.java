@@ -119,4 +119,25 @@ public class Map {
 
         return res;
     }
+    
+    public void addDrone(Drone d) {
+    	environment.add(d);
+    }
+    
+    public Building getBuildingByName(String name) {
+    	
+    	Building res = null;
+    	for (WorldObject temp : environment) {
+            
+    		if(temp instanceof Building) {
+    			Building b = (Building) temp;
+    			
+    			if(b.getName().equalsIgnoreCase(name)) {
+    				res = b;
+    			}
+    		}
+        }
+    	
+    	return res;
+    }
 }

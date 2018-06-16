@@ -122,6 +122,32 @@ public class SimulationDrone extends Application {
             @Override
             public void handle(ActionEvent e) {
                 // create drone
+            	String startingBuildingName = from.getValue();
+            	String goalName = to.getValue();
+            	DroneType dt = typeDrone.getValue();
+            	Priority p = priority.getValue();
+            	MissionType mt = typeMission.getValue();
+            	
+            	DroneCharacteristics dc = new DroneCharacteristics(dt);
+            	
+            	Station stationDepart = map.getBuildingByName(startingBuildingName).getStation();
+            	
+            	Vect3 posDepart = stationDepart.getPosition();
+            	Vect3 speed = new Vect3(0,0,0);
+            	Vect3 size = new Vect3(0,0,0);
+            	Sphere sph = new Sphere(posDepart, dc.getRadius());
+            	
+            	Station stationArr = map.getBuildingByName(goalName).getStation();
+            	
+            	Vect3 posArr = stationArr.getPosition();
+            	
+            	Objective obj = new Objective(posArr);
+            	
+            	Mission mission = new Mission(obj, p);
+            	
+            	Drone d = new Drone(posDepart, speed, size, sph, dc, 100, 0, 0, mission);
+            	
+            	map.addDrone(d);
             }
         });
 
