@@ -16,7 +16,7 @@ public class Map {
 		for(int i = 0; i < 5; i++) {
 			
 			//Generates dumb dumb dumb basic map
-			Vect3 position = new Vect3(i*50,i*50,i*50);
+			Vect3 position = new Vect3(i*50,i*50,0);
 			Vect3 speed = new Vect3(0,0,0);
 			Vect3 size = new Vect3(10,10,10);
 			
