@@ -5,6 +5,7 @@
  */
 package simulationDrones;
 
+import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -47,6 +48,7 @@ public class SimulationDrone extends Application {
 
     private void Initializer() {
         Const = new Constantes();
+        map = new Map();
         timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
@@ -88,17 +90,21 @@ public class SimulationDrone extends Application {
         ComboBox<DroneType> typeDrone = new ComboBox<>();
         typeDrone.getItems().setAll(DroneType.values());
         typeDrone.getSelectionModel().select(DroneType.Mini);
+               
+        ComboBox<String> from = new ComboBox<>();
         
+        ComboBox<String> to = new ComboBox<>();
         
-        ComboBox<WorldObject> from = new ComboBox<>();
-        //from.getItems().setAll();
-        //from.getSelectionModel().select();
+        ArrayList<Building> buildings = map.getBuildingWithStation();
         
-        ComboBox<WorldObject> to = new ComboBox<>();
-        //to.getItems().setAll();
-        //to.getSelectionModel().select();
-        
-        
+        for(Building building : buildings){
+            from.getItems().add(building.getName());
+            to.getItems().add(building.getName());
+        }
+
+        from.getSelectionModel().select(0);
+        to.getSelectionModel().select(1);
+                
         ComboBox<Priority> priority = new ComboBox<>();
         priority.getItems().setAll(Priority.values());
         priority.getSelectionModel().select(Priority.Low);
