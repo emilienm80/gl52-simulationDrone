@@ -62,5 +62,8 @@ public class Building extends WorldObject {
 		return collidingBox;
 	}
 
+	public Station getStation() {
+		return this.droneStation;
+	}
 
 }
