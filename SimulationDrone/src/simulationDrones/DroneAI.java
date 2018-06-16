@@ -22,8 +22,15 @@ public class DroneAI {
 		 * @param map the map in which the simulation is taking place
 		 * @return a 3 component vector containing the direction the drone has to move in
 		 */
-		public static Vect3 updateSpeed(Vect3 positionDrone, Vect3 goalPosition, Map map) {
+		public static Vect3 updateSpeed(Drone drone, Vect3 goalPosition, Map map) {
+			Vect3 positionDrone = drone.getPosition();
 			Vect3 speed = new Vect3(positionDrone.getSubstracted(goalPosition));
+			
+			Vect3 nextPosition = positionDrone.getAdded(speed);
+			
+			Collider nextCollider = new Sphere(nextPosition, drone.getCharacteristics().getRadius());
+			
+			map.testCollision(nextCollider);
 			
 			return speed.getNormalized();
 		}
