@@ -7,13 +7,16 @@ public class Station extends WorldObject {
 		// TODO Auto-generated constructor stub
 	}
 	
+	public Station(Vect3 position, Vect3 speed, Vect3 size) {
+		super(position, speed, size);
+	}
+	
 	//deep copy
 	public Station(Station s) {
 		super(s);
 		// TODO Auto-generated constructor stub
 	}
 	
-
 
 	@Override
 	public WorldObject copy() {

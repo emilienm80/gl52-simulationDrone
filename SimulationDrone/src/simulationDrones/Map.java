@@ -21,7 +21,10 @@ public class Map {
 			Vect3 size = new Vect3(10,10,10);
 			
 			RectCuboid cb = new RectCuboid(position, size);
-			Station station = null;
+			
+			Vect3 positionStation = new Vect3(i*50,i*50,size.getZ());
+			Vect3 sizeStation = new Vect3(size.getX(), size.getY(), 0);
+			Station station = new Station(positionStation, sizeStation, speed);
 			
 			String name = "Building "+String.valueOf(i);
 			
