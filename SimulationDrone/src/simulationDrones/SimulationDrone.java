@@ -225,6 +225,7 @@ public class SimulationDrone extends Application {
             gc.fillRect(building.getPosition().getX(), building.getPosition().getY(), building.getSize().getX(), building.getSize().getY());
             if (building.getStation() != null){
                 gc.setFill(Color.WHITE);
+                gc.fillText(building.getName(), building.getPosition().getX() + Const.BORDER_FRAME, building.getPosition().getY() + Const.BORDER_FRAME, 100);
                 gc.fillRect(building.getStation().getPosition().getX(), building.getStation().getPosition().getY(), building.getStation().getSize().getX(), building.getStation().getSize().getY());                
             }
 

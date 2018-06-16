@@ -26,28 +26,28 @@ public class Map {
         Station stationLeftBottom = new Station(new Vect3(100, 812, 0), new Vect3(0, 0, 0), new Vect3(50, 50, 200));
         RectCuboid rectLeftBottom = new RectCuboid(new Vect3(50, 750, 0), new Vect3(150, 175, 200));
         Building LeftBottom = new Building(new Vect3(50, 750, 0), new Vect3(0, 0, 0), new Vect3(150, 175, 200), rectLeftBottom, stationLeftBottom, "Building 3");  
-        
-        Station stationCenterTop = new Station(new Vect3(750, 465, 0), new Vect3(0, 0, 0), new Vect3(50, 50, 200));
-        RectCuboid rectCenterTop = new RectCuboid(new Vect3(700, 415, 0), new Vect3(150, 150, 200));
-        Building CenterTop = new Building(new Vect3(700, 415, 0), new Vect3(0, 0, 0), new Vect3(150, 150, 200), rectCenterTop, stationCenterTop, "Building 4");
 
-        RectCuboid rectCenterCenter = new RectCuboid(new Vect3(700, 135, 0), new Vect3(150, 150, 200));
-        Building CenterCenter = new Building(new Vect3(700, 135, 0), new Vect3(0, 0, 0), new Vect3(150, 150, 200), rectCenterCenter, null, "Building 5"); 
+        RectCuboid rectCenterTop = new RectCuboid(new Vect3(700, 135, 0), new Vect3(150, 150, 200));
+        Building CenterTop = new Building(new Vect3(700, 135, 0), new Vect3(0, 0, 0), new Vect3(150, 150, 200), rectCenterTop, null, "Building 4"); 
+       
+        Station stationCenterCenter = new Station(new Vect3(750, 465, 0), new Vect3(0, 0, 0), new Vect3(50, 50, 200));
+        RectCuboid rectCenterCenter  = new RectCuboid(new Vect3(700, 415, 0), new Vect3(150, 150, 200));
+        Building CenterCenter = new Building(new Vect3(700, 415, 0), new Vect3(0, 0, 0), new Vect3(150, 150, 200), rectCenterCenter, stationCenterCenter, "Building 5");
        
         Station stationCenterBottom = new Station(new Vect3(775, 825, 0), new Vect3(0, 0, 0), new Vect3(50, 50, 200));
         RectCuboid rectCenterBottom = new RectCuboid(new Vect3(600, 750, 0), new Vect3(400, 200, 200));
         Building CenterBottom = new Building(new Vect3(600, 750, 0), new Vect3(0, 0, 0), new Vect3(400, 200, 200), rectCenterBottom, stationCenterBottom, "Building 6");
     
         RectCuboid rectRightTop = new RectCuboid(new Vect3(1300, 50, 0), new Vect3(200, 250, 200));
-        Building RightTop = new Building(new Vect3(1300, 50, 0), new Vect3(0, 0, 0), new Vect3(200, 250, 200), rectRightTop, null, "Building 6");  
+        Building RightTop = new Building(new Vect3(1300, 50, 0), new Vect3(0, 0, 0), new Vect3(200, 250, 200), rectRightTop, null, "Building 7");  
    
         Station stationRightCenter = new Station(new Vect3(1375, 450, 0), new Vect3(0, 0, 0), new Vect3(50, 50, 200));
         RectCuboid rectRightCenter = new RectCuboid(new Vect3(1300, 350, 0), new Vect3(200, 250, 200));
-        Building RightCenter = new Building(new Vect3(1300, 350, 0), new Vect3(0, 0, 0), new Vect3(200, 250, 200), rectRightCenter, stationRightCenter, "Building 7");  
+        Building RightCenter = new Building(new Vect3(1300, 350, 0), new Vect3(0, 0, 0), new Vect3(200, 250, 200), rectRightCenter, stationRightCenter, "Building 8");  
 
         Station stationRightBottom = new Station(new Vect3(1375, 775, 0), new Vect3(0, 0, 0), new Vect3(50, 50, 200));
         RectCuboid rectRightBottom = new RectCuboid(new Vect3(1300, 650, 0), new Vect3(200, 300, 200));
-        Building RightBottom = new Building(new Vect3(1300, 650, 0), new Vect3(0, 0, 0), new Vect3(200, 300, 200), rectRightBottom, stationRightBottom, "Building 8"); 
+        Building RightBottom = new Building(new Vect3(1300, 650, 0), new Vect3(0, 0, 0), new Vect3(200, 300, 200), rectRightBottom, stationRightBottom, "Building 9"); 
         
           
         
