@@ -113,7 +113,7 @@ public class Vect3 {
 	
 	
 	/**
-	 * Merci la surcharge d'opérateurs !
+	 * Merci la surcharge d'operateurs !
 	 * @param c
 	 * @return this vector/point multiplied by c.
 	 */

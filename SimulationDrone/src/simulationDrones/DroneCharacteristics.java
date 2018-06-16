@@ -3,11 +3,11 @@ package simulationDrones;
 public class DroneCharacteristics {
 	
 	private double maxSpeed;//m/s
-	private Vect3 maneuverability;//m/s²
+	private Vect3 maneuverability;//m/s^2
 	private double radius;//m
 	private double motorEfficiency;//No unit
 	private double motorMaxConsumption;//W
-	private double propellerLift;//Kg/m²/s
+	private double propellerLift;//Kg/m^2/s
 	private double maxPayload;//Kg
 	private double dryWeight;//Kg
 	private double batteryCapacity;//W.h=Joules/3600

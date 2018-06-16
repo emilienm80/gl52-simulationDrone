@@ -124,7 +124,7 @@ public class CollisionTools {
 		
 		//then the movement vector of the point defines a line, whose intersection with the sphere happens at time t. We will find t.
 		
-		//solve intersection equation at²+bt+c=0
+		//solve intersection equation Math.pow(at, 2)+bt+c=0
 		double a=(pv.getX()*pv.getX()+pv.getY()*pv.getY()+pv.getZ()*pv.getZ());
 		double b=2*(pv.getX()*p.getX()+pv.getY()*p.getY()+pv.getZ()*p.getZ());
 		double c=(p.getX()*p.getX()+p.getY()*p.getY()+p.getZ()*p.getZ()-s.getRadius()*s.getRadius());
