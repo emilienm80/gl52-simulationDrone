@@ -36,7 +36,10 @@ public class Building extends WorldObject {
     //deep copy
     public Building(Building b) {
         super(b);
-        droneStation = new Station(b.droneStation);
+        if(b.droneStation!=null)
+        {
+        	droneStation = new Station(b.droneStation);
+        }
         collidingBox = new RectCuboid(position, size);
     }
 

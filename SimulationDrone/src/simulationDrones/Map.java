@@ -6,7 +6,7 @@ import utilities.Constantes;
 public class Map {
 
     private RectCuboid limitsbox;
-    private ArrayList<Drone> drones = new ArrayList<Drone>();
+    //private ArrayList<Drone> drones = new ArrayList<Drone>();
     //building
     private ArrayList<WorldObject> environment = new ArrayList<WorldObject>(); //buildings, stations and everything
     private Constantes Const;
@@ -139,6 +139,15 @@ public class Map {
         }
     	
     	return res;
+    }
+    
+    /**
+     * 
+     * @return all di objects in da map !
+     */
+    public ArrayList<WorldObject> getAllObjects() {
+
+        return this.environment;
     }
     
     public ArrayList<Drone> getDrone() {

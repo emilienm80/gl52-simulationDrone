@@ -5,6 +5,12 @@ import java.util.Vector;
 
 //TODO decide if position should be already updated with the movement vector when entering collision functions
 
+//TODO add weight factors for collision between cuboid and sphere with 2 speeds
+
+//TODO return the two positions of objects after collision, or modify directly the parameters object's coordinates ?
+
+//TODO put collision tools in the Collider class
+
 /**
  * 
  * Useful static collision functions
@@ -141,6 +147,9 @@ public class CollisionTools {
 	public static Vector<Vect3> getSpheresCentersAtCollision(Sphere s1, Sphere s2, Vect3 sphere1MovementVector, Vect3 sphere2MovementVector)
 	{
 		Vector<Vect3> res=new Vector<>();
+		Vect3 cs1;
+		Vect3 cs2;
+		double t=-1;//initialized with wrong value
 		
 		//simplify the problem
 		Sphere s=new Sphere(new Vect3(0,0,0), s1.getRadius()+s2.getRadius());//assume we have a sphere of radius r1+r2 centered on origin and a point
@@ -153,30 +162,50 @@ public class CollisionTools {
 		double a=(pv.getX()*pv.getX()+pv.getY()*pv.getY()+pv.getZ()*pv.getZ());
 		double b=2*(pv.getX()*p.getX()+pv.getY()*p.getY()+pv.getZ()*p.getZ());
 		double c=(p.getX()*p.getX()+p.getY()*p.getY()+p.getZ()*p.getZ()-s.getRadius()*s.getRadius());
-		double discrim=b*b-4*a*c;//compute the discriminant to solve the 2nd order equation of the collision
 		
-		if(discrim<0)//no collision
+		if(a==0)//1st order equation
 		{
-			res.add(s1.getCenter().getAdded(sphere1MovementVector));
-			res.add(s2.getCenter().getAdded(sphere2MovementVector));
-			return res;
+			if(b==0)//no collision (or already collided), but relative speed of the spheres is null, nothing to do
+			{
+				//go to WRONG T 
+			}
+			else
+			{
+				t=-c/b;
+			}			
 		}
-		else
+		else//2nd order equation
 		{
-			double sqd=Math.sqrt(discrim);
-			double t1=0.5*(-b-sqd)/a;
-			double t2=0.5*(-b+sqd)/a;
-			double t=Math.min(t1, t2);//keep earliest collision time
+			double discrim=b*b-4*a*c;//compute the discriminant to solve the 2nd order equation of the collision
 			
+			if(discrim<0)//no collision, move spheres normally
+			{
+				//go to WRONG T 
+			}
+			else
+			{
+				double sqd=Math.sqrt(discrim);
+				double t1=0.5*(-b-sqd)/a;
+				double t2=0.5*(-b+sqd)/a;
+				t=Math.min(t1, t2);//keep earliest collision time
+			}
+		}
+		
+		if(isWithin(t, 0, 1))//t is between 0 and 1
+		{
 			//as we have t, we can compute spheres centers at collision time, with original spheres data
-			Vect3 cs1=(new Vect3(t,t,t)).multiplyBy(sphere1MovementVector).add(s1.getCenter());
-			Vect3 cs2=(new Vect3(t,t,t)).multiplyBy(sphere2MovementVector).add(s2.getCenter());
-			
-			res.add(cs1);
-			res.add(cs2);
-			return res;
+			cs1=(new Vect3(t,t,t)).multiplyBy(sphere1MovementVector).add(s1.getCenter());
+			cs2=(new Vect3(t,t,t)).multiplyBy(sphere2MovementVector).add(s2.getCenter());
+		}
+		else//WRONG T : no collision detected, already collided or collision farther ahead of speed vector
+		{
+			cs1=s1.getCenter().getAdded(sphere1MovementVector);
+			cs2=s2.getCenter().getAdded(sphere2MovementVector);
 		}
 		
+		res.add(cs1);
+		res.add(cs2);
+		return res;
 	}
 	
 	/**
@@ -217,10 +246,63 @@ public class CollisionTools {
 		return collisionPoint.add(shift);
 	}
 	
+	/**
+	 * Move the two spheres in order to make them tangent (move them along the vector formed by their respectives centers). If the spheres are overlapping, it will move them away from each other, otherwise it will bring them nearer.
+	 * w1 and w2 are the weights of the spheres. The "heavier" sphere will travel less distance than the other. (w2/(w1+w2))
+	 * <br>
+	 * If you don't know which value to choose for the weight, put in the corresponding sphere radius.
+	 * @param s1
+	 * @param s2
+	 * @param w1
+	 * @param w2
+	 */
+	public static void stickSpheres(Sphere s1, Sphere s2, double w1, double w2)
+	{
+		//can be removed if we want replace the weight by the moving coefficient
+		w1=1/w1;//we could also swap w1 and w2 two avoid a costly division
+		w2=1/w2;
+		
+		double invw=1/(w1+w2);
+		w1*=invw;
+		w2*=invw;
+		//w1+w2=1
+		
+		Vect3 vS1S2=new Vect3(s1.getCenter(), s2.getCenter());
+		if(vS1S2.isNullVector())//spheres are centered on the same point
+		{
+			double epsilonShift=0.001;
+			s1.getCenter().setX(s1.getCenter().getX()-epsilonShift);//arbitrary move them along the X axis
+			s2.getCenter().setX(s2.getCenter().getX()+epsilonShift);
+			vS1S2.setX(2*epsilonShift);
+			//the spheres are now shifted to permit the movement
+		}
+		
+		double d=s1.getRadius()+s2.getRadius()-vS1S2.norm();//total moving distance. Positive if spheres are overlapping, negative otherwise.
+		vS1S2.Normalize();
+		
+		s1.setCenter(s1.getCenter().getAdded(vS1S2.getMultipliedBy(-d*w1)));
+		s2.setCenter(s2.getCenter().getAdded(vS1S2.getMultipliedBy(d*w2)));
+	}
+	
+	public static void stickSpheres(Sphere s1, Sphere s2)
+	{
+		stickSpheres(s1, s2, 1, 1);
+	}
+	
 	
 	public static double limit(double v, double min, double max)
 	{
 		return Math.min(Math.max(min, v), max);
 	}
 	
+	/**
+	 * Check if a number is between bounds [min;max]
+	 * @param min
+	 * @param max
+	 * @return true if n is between min and max included 
+	 */
+	public static boolean isWithin(double n, double min, double max)
+	{
+		return n>=min && n<=max;
+	}
 }

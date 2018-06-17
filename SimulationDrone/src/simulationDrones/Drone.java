@@ -93,11 +93,12 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 		return false;
 	}
 
+	/*
 	@Override
 	public void move(double time) {
 		// TODO Auto-generated method stub
 		
-	}
+	}*/
 	
 	public void dischargeBattery(double time)
 	{
