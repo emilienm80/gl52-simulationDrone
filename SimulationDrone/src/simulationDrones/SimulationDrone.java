@@ -45,11 +45,13 @@ public class SimulationDrone extends Application {
     private AnimationTimer timer;
     private Timeline timeline;
     private Map map;
+    private PhysicsEngine physicsEngine;
     private ArrayList<Building> buildings;
 
     private void Initializer() {
         Const = new Constantes();
         map = new Map();
+        physicsEngine=new PhysicsEngine(map);
         buildings = map.getBuilding();
         timer = new AnimationTimer() {
             @Override
@@ -234,6 +236,10 @@ public class SimulationDrone extends Application {
         timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
+            	
+            	double elapsedTime=0.06;//TODO get time diff between each frame
+            	physicsEngine.updateMap(elapsedTime);//update world according to elapsed time
+            	
                 Draw(canvas.getGraphicsContext2D());
                 /*if (compt < 500) {
                     ++compt;
@@ -258,9 +264,10 @@ public class SimulationDrone extends Application {
         }
         
         ArrayList<Drone> drones = map.getDrone();
+        
         for(Drone drone : drones) {
         	gc.setFill(Color.web("#121212"));
-        	double width = drone.getCharacteristics().getRadius();
+        	double width = drone.getCharacteristics().getRadius()*200;//TODO adjust with proper constant (ratio between drone radius in meters and screen size in pixels)
         	System.out.println(drone.getPosition().getX()+" "+drone.getPosition().getY()+" "+ width+" "+width);
         	gc.fillOval(drone.getPosition().getX(), drone.getPosition().getY(), width, width);
         }

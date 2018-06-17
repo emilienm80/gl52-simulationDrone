@@ -6,14 +6,27 @@ public class PhysicsEngine {
 	
 	private Map map;
 	
+	public PhysicsEngine(Map m) {
+		this.map=m;
+	}
+	
+	
+	public void updateMap(double time)
+	{
+		if(map!=null)
+		{
+			updateWorld(map.getAllObjects(), time);
+		}
+	}
+	
 	public void updateWorld(ArrayList<WorldObject> world, double time)
 	{
-		ArrayList<WorldObject> newWorld=new ArrayList<>();
+		ArrayList<WorldObject> oldWorld=new ArrayList<>();
 		for (WorldObject w : world) {
-			newWorld.add(w.copy());
+			oldWorld.add(w.copy());
 		}
 		
-		for (WorldObject w : newWorld) {
+		for (WorldObject w : world) {
 			w.move(time);
 			checkCollisions(w, world);
 
@@ -21,11 +34,13 @@ public class PhysicsEngine {
 			{
 				Drone d = ((Drone) w);
 				Vect3 goalPosition = d.getNextObjective().getPosition();
-				w.setSpeed(DroneAI.AI.updateSpeed(d, goalPosition, map));
+				//w.setSpeed(DroneAI.AI.updateSpeed(d, goalPosition, map));
+				d.setSpeed(new Vect3(10,10,0));
 			}
 		}
 	}
 	
+	//TODO collisions
 	private void checkCollisions(WorldObject w, ArrayList<WorldObject> world)
 	{
 		
