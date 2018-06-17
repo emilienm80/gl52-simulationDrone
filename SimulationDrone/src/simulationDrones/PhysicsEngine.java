@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class PhysicsEngine {
 	
+	public static Vect3 Gravity=new Vect3(0,0,-9.81);
+	
 	private Map map;
 	
 	public PhysicsEngine(Map m) {

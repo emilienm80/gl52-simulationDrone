@@ -10,6 +10,8 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 	private double batteryLevel;//W.h=Joules/3600
 	private double payload;//Kg
 	private double motorThrottle;//%
+	private Vect3 targetDirection;//the direction where the drone is trying to go - should be updated by the AI
+	
 	
 	private Mission mission;
 	
@@ -26,9 +28,17 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 	public double getMotorThrottle() {
 		return motorThrottle;
 	}
+	public Vect3 getTargetDirection() {
+		return targetDirection;
+	}
+	public void setTargetDirection(Vect3 targetDirection) {
+		this.targetDirection = targetDirection;
+	}
 	
+
 	public double getMotorOutputPower() { return getMotorConsumption()*characteristics.getMotorEfficiency(); } //W
 	public double getMotorConsumption() { return motorThrottle*characteristics.getMotorMaxConsumption(); } //W
+	public double getTotalFlyWeight() { return payload+characteristics.getDryWeight(); } //W
 	
 	
 	public DroneAI getBrain() {
@@ -99,6 +109,16 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 		// TODO Auto-generated method stub
 		
 	}*/
+	
+	public void updateSpeed(double time)
+	{
+		//so dirty without operator overloading...
+		Vect3 propellerAcceleration = targetDirection.getNormalized().multiplyBy(characteristics.getPropellerLift() * getMotorOutputPower() / getTotalFlyWeight());
+		Vect3 dragAcceleration = speed.getMultipliedBy(speed.norm() * characteristics.getAirDrag() / getTotalFlyWeight());
+		Vect3 acceleration = propellerAcceleration.getAdded(PhysicsEngine.Gravity).substract(dragAcceleration);
+		
+		speed.add(acceleration.getMultipliedBy(time));
+	}
 	
 	public void dischargeBattery(double time)
 	{
