@@ -294,4 +294,15 @@ public class CollisionTools {
 	{
 		return Math.min(Math.max(min, v), max);
 	}
+	
+	/**
+	 * Check if a number is between bounds [min;max]
+	 * @param min
+	 * @param max
+	 * @return true if n is between min and max included 
+	 */
+	public static boolean isWithin(double n, double min, double max)
+	{
+		return n>=min && n<=max;
+	}
 }
