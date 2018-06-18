@@ -1,5 +1,7 @@
 package simulationDrones;
 
+import java.util.ArrayList;
+
 import org.w3c.dom.css.Rect;
 
 import com.sun.media.sound.InvalidDataException;
@@ -93,13 +95,15 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 		super(d);
 		
 		characteristics=d.characteristics;
-		//brain=d.brain;TODO
+		brain=d.brain;
 		batteryLevel=d.batteryLevel;
 		payload=d.payload;
 		motorThrottle=d.motorThrottle;
 		propellerDirection=new Vect3(d.propellerDirection);
 		
 		collidingBox=new Sphere(position, characteristics.getRadius());
+		
+		mission=new Mission(d.mission);
 	}
 	
 	
@@ -136,6 +140,9 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 		if(propDir.getZ()<=0)
 		{
 			System.out.println("Invalid propellerDirection. Did nothing.");
+			//in this case leaning angle is exceeded and the drone can go in any unwanted direction, but physics will still work as expected
+			//this can be dangerous if the control module doesn't take this into account
+			//we have to link propellerDirection from output of control module to input of updateSpeed
 			return;
 		}
 		
@@ -233,7 +240,14 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 	 * @return
 	 */
 	public Objective getNextObjective() {
-		return new Objective(1,2);
+		
+		ArrayList<Objective> objs=mission.getObjectives();
+		if(objs.size()>0)
+		{
+			return objs.get(0);
+		}
+		
+		return new Objective(0, 0);
 	}
 
 	@Override

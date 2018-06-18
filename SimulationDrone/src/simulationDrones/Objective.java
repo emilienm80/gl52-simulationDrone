@@ -29,6 +29,10 @@ public class Objective {
 	public Objective(Vect3 pos) {
 		this.position = pos;
 	}
+	
+	public Objective(Objective o) {
+		this.position = new Vect3(o.position);
+	}
 
 	public Vect3 getPosition() {
 		return position;

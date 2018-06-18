@@ -43,9 +43,20 @@ public class Mission {
 	 * @param prior the priority of the mission
 	 */
 	public Mission(Objective obj, Priority prior) {
-		ArrayList<Objective> objectives = new ArrayList<Objective>();
+		objectives = new ArrayList<Objective>();
 		objectives.add(obj);
 		setPriority(prior);
+	}
+	
+	/**
+	 * deep copy constructor
+	 */
+	public Mission(Mission m) {
+		this();
+		for (Objective obj : m.objectives) {
+			objectives.add(new Objective(obj));
+		}
+		this.priority=m.priority;
 	}
 
 	public ArrayList<Objective> getObjectives() {

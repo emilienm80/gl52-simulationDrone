@@ -48,6 +48,8 @@ public class SimulationDrone extends Application {
     private PhysicsEngine physicsEngine;
     private ArrayList<Building> buildings;
     private double lastFrameTimestamp=0; 
+    private double frameTimeSum=0; 
+    private int nbFrame=0; 
 
     private void Initializer() {
         Const = new Constantes();
@@ -238,14 +240,19 @@ public class SimulationDrone extends Application {
         timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
+            	nbFrame++;
             	
             	double currentTimestamp=System.nanoTime();
             	double elapsedTime=0.000000001*(currentTimestamp-lastFrameTimestamp);//seconds
             	lastFrameTimestamp=currentTimestamp;
+            	frameTimeSum+=elapsedTime;
             	
             	physicsEngine.updateMap(elapsedTime);//update world according to elapsed time
             	
+            	//System.out.print("Average Frame time : "+CollisionTools.round(1000*frameTimeSum/nbFrame,2)+" ms     ");
                 Draw(canvas.getGraphicsContext2D());
+                
+                
             }
         };
         framePanel.getChildren().add(canvas);
@@ -271,8 +278,10 @@ public class SimulationDrone extends Application {
                 //System.out.println("ici");
         	gc.setFill(Color.web("#121212"));
         	double width = 2*drone.getCharacteristics().getRadius()*100;//TODO adjust with proper constant (ratio between drone radius in meters and screen size in pixels)
+        	
         	//System.out.println(drone.getPosition().getX()+" "+drone.getPosition().getY()+" "+drone.getPosition().getZ()+" "+ width+" "+width);
-        	System.out.println("Pos "+drone.getPosition().toStringLen(60,3)+" Speed "+drone.getSpeed().toStringLen(60,3));
+        	System.out.println("Pos "+drone.getPosition().toStringLen(50,3)+" Speed "+drone.getSpeed().toStringLen(50,3)+ " Motor consumption "+drone.getMotorConsumption()+" W");
+        	
         	gc.fillOval(drone.getPosition().getX(), drone.getPosition().getY(), width, width);
         	
         	gc.fillText("z="+CollisionTools.round(drone.getPosition().getZ(),2), drone.getPosition().getX(), drone.getPosition().getY());
