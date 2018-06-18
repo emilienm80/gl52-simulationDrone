@@ -47,6 +47,7 @@ public class SimulationDrone extends Application {
     private Map map;
     private PhysicsEngine physicsEngine;
     private ArrayList<Building> buildings;
+    private double lastFrameTimestamp=0; 
 
     private void Initializer() {
         Const = new Constantes();
@@ -81,6 +82,7 @@ public class SimulationDrone extends Application {
                 createCanvas();
                 timer.start();
                 timeline.play();
+                lastFrameTimestamp=System.nanoTime();
             }
         });
 
@@ -147,7 +149,7 @@ public class SimulationDrone extends Application {
             	
             	Mission mission = new Mission(obj, p);
             	
-            	Drone d = new Drone(posDepart, speed, size, sph, dc, 100, 0, 0, mission);
+            	Drone d = new Drone(posDepart, speed, size, sph, dc, 10, 0, 0, mission);
             	
             	map.addDrone(d);
             }
@@ -237,7 +239,10 @@ public class SimulationDrone extends Application {
             @Override
             public void handle(long now) {
             	
-            	double elapsedTime=0.06;//TODO get time diff between each frame
+            	double currentTimestamp=System.nanoTime();
+            	double elapsedTime=0.000000001*(currentTimestamp-lastFrameTimestamp);//seconds
+            	lastFrameTimestamp=currentTimestamp;
+            	
             	physicsEngine.updateMap(elapsedTime);//update world according to elapsed time
             	
                 Draw(canvas.getGraphicsContext2D());
@@ -263,11 +268,15 @@ public class SimulationDrone extends Application {
         ArrayList<Drone> drones = map.getDrone();
         
         for(Drone drone : drones) {
-                System.out.println("ici");
+                //System.out.println("ici");
         	gc.setFill(Color.web("#121212"));
-        	double width = drone.getCharacteristics().getRadius()*200;//TODO adjust with proper constant (ratio between drone radius in meters and screen size in pixels)
-        	System.out.println(drone.getPosition().getX()+" "+drone.getPosition().getY()+" "+ width+" "+width);
+        	double width = 2*drone.getCharacteristics().getRadius()*100;//TODO adjust with proper constant (ratio between drone radius in meters and screen size in pixels)
+        	//System.out.println(drone.getPosition().getX()+" "+drone.getPosition().getY()+" "+drone.getPosition().getZ()+" "+ width+" "+width);
+        	System.out.println("Pos "+drone.getPosition().toStringLen(60,3)+" Speed "+drone.getSpeed().toStringLen(60,3));
         	gc.fillOval(drone.getPosition().getX(), drone.getPosition().getY(), width, width);
+        	
+        	gc.fillText("z="+CollisionTools.round(drone.getPosition().getZ(),2), drone.getPosition().getX(), drone.getPosition().getY());
+        	gc.fillText(CollisionTools.round(drone.getBatteryLevelRelative()*100,1) +"%", drone.getPosition().getX(), drone.getPosition().getY()+width*2);
         }
     }
 

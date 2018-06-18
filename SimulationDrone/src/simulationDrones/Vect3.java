@@ -85,7 +85,14 @@ public class Vect3 {
 	 */
 	public Vect3 getNormalized()
 	{
-		return this.getMultipliedBy(1/this.norm());
+		double norm=this.norm();
+		
+		if(norm==0)
+		{
+			return new Vect3(0,0,1);//we don't throw an exception, but orient it towards the z axis by convention
+		}
+		
+		return this.getMultipliedBy(1/norm);
 	}
 	
 	/**
@@ -94,7 +101,14 @@ public class Vect3 {
 	 */
 	public Vect3 Normalize()
 	{
-		return this.multiplyBy(1/this.norm());
+		double norm=this.norm();
+		
+		if(norm==0)
+		{
+			return this;//we don't throw an exception
+		}
+		
+		return this.multiplyBy(1/norm);
 	}
 	
 	public Vect3 reverse()
@@ -268,6 +282,23 @@ public class Vect3 {
 	@Override
 	public String toString() {
 		return "Vect3 [x=" + x + ", y=" + y + ", z=" + z + "]";
+	}
+	
+	/**
+	 * return a fixed length representation
+	 * @param len
+	 * @return
+	 */
+	public String toStringLen(int len, int decimals) {
+		String res="[x=" + CollisionTools.round(x, decimals) + ", y=" + CollisionTools.round(y, decimals) + ", z=" + CollisionTools.round(z, decimals) + "]";
+		int diff=len-res.length();
+
+		for(int i=0;i<diff;i++)
+		{
+			res+=" ";
+		}
+
+		return res=res.substring(0, len);
 	}
 
 

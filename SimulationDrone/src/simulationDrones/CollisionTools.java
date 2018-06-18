@@ -24,6 +24,10 @@ import java.util.Vector;
  */
 public class CollisionTools {
 
+	//move these elsewhere (maybe in Constants class ?)
+	public static final double DegToRad=Math.PI/180;
+	public static final double WsToWh=1.0/3600; //watt per second to watt per hour
+	
 	/**
 	 * 
 	 * @param rc1
@@ -87,7 +91,7 @@ public class CollisionTools {
 			if(c2 instanceof Sphere) {
 				res = intersect((Sphere) c1, (Sphere) c2);
 			}else if(c2 instanceof RectCuboid) {
-				res = intersect((RectCuboid) c1, (Sphere) c2);
+				res = intersect((RectCuboid) c2, (Sphere) c1);
 			}
 		}else if(c1 instanceof RectCuboid) {
 			if(c2 instanceof Sphere) {
@@ -304,5 +308,18 @@ public class CollisionTools {
 	public static boolean isWithin(double n, double min, double max)
 	{
 		return n>=min && n<=max;
+	}
+	
+	/**
+	 * Damn java that doesn't even have the fucking simplest math function.
+	 * 
+	 * I'm so angry that this function will not even check for bad arguments, ha !
+	 * @param n
+	 * @param decimals
+	 * @return
+	 */
+	public static double round(double n, int decimals) {
+		double power = Math.pow(10, decimals);
+		return Math.round(n * power) / power;
 	}
 }

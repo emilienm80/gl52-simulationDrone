@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class PhysicsEngine {
 	
-	public static Vect3 Gravity=new Vect3(0,0,-9.81);
+	public static final Vect3 Gravity=new Vect3(0,0,-9.81);
 	
 	private Map map;
 	
@@ -35,9 +35,11 @@ public class PhysicsEngine {
 			if(w instanceof Drone)
 			{
 				Drone d = ((Drone) w);
-				Vect3 goalPosition = d.getNextObjective().getPosition();
-				//w.setSpeed(DroneAI.AI.updateSpeed(d, goalPosition, map));
-				d.setSpeed(new Vect3(10,10,0));
+				d.updateMe(time);
+				//Vect3 goalPosition = d.getNextObjective().getPosition(); -> bug !
+				//d.setTargetDirection(DroneAI.AI.updateSpeed(d, goalPosition, map));
+				d.setPropellerDirection(new Vect3(1,0.5,1));//for testing only. the drone should be further controlled with a command module
+				d.setMotorThrottle(1);
 			}
 		}
 	}
