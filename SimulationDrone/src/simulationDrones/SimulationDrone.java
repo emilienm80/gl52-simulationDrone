@@ -136,22 +136,25 @@ public class SimulationDrone extends Application {
             	
             	DroneCharacteristics dc = new DroneCharacteristics(dt);
             	
-            	Station stationDepart = map.getBuildingByName(startingBuildingName).getStation();
+            	Building buildingDepart = map.getBuildingByName(startingBuildingName);
+            	Station stationDepart = buildingDepart.getStation();
             	
             	Vect3 posDepart = stationDepart.getPosition();
             	Vect3 speed = new Vect3(0,0,0);
             	Vect3 size = new Vect3(0,0,0);
             	Sphere sph = new Sphere(posDepart, dc.getRadius());
             	
-            	Station stationArr = map.getBuildingByName(goalName).getStation();
+            	Building buildingArr = map.getBuildingByName(goalName);
+            	Station stationArr = buildingArr.getStation();
             	
             	Vect3 posArr = stationArr.getPosition();
+            	//posArr.setZ(buildingArr.getSize().getZ()+stationArr.getPosition().getZ());
             	
             	Objective obj = new Objective(posArr);
             	
             	Mission mission = new Mission(obj, p);
             	
-            	Drone d = new Drone(posDepart, speed, size, sph, dc, 10, 0, 0, mission);
+            	Drone d = new Drone(posDepart, speed, size, sph, dc, 80, 0, 0, mission);
             	
             	map.addDrone(d);
             }
