@@ -1,6 +1,7 @@
 package simulationDrones;
 
 import java.util.ArrayList;
+import java.math.*;
 
 /**
  * Class intended to represent either a 3D point or vector.
@@ -164,6 +165,15 @@ public class Vect3 {
 	public Vect3 getSubstracted(Vect3 a)
 	{
 		return new Vect3(x-a.x, y-a.y, z-a.z);
+	}
+	
+	public double getAngle(Vect3 a) 
+	{
+		double res;
+		double temp = this.dotProduct(a);
+		temp = temp/(this.norm()*a.norm());
+		res = Math.acos(temp);
+		return res;
 	}
 	
 	/**
