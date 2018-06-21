@@ -51,7 +51,6 @@ public class PhysicsEngine {
 								
 				Vect3 goalPosition = d.getNextObjective().getPosition();
 				d.setPropellerDirection(DroneAI.AI.updateSpeed(d, goalPosition, map));
-				d.setMotorThrottle(1);
 			}
 		}
 	}
