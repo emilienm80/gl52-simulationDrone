@@ -1,4 +1,7 @@
-package simulationDrones;
+package world;
+
+import physics.collisions.colliders.Collider;
+import utilities.Vect3;
 
 //put position, speed and size in the collider only ?
 public abstract class WorldObject {
@@ -74,7 +77,13 @@ public abstract class WorldObject {
 	public Vect3 getPosition() {
 		return position;
 	}
+	
+	//position is not meant to be used outside of this class family, position should be updated by updateSpeed() and collideWith() only
+	public void setPosition(Vect3 position) {
+		this.position = position;
+	}
 
+	
 	public Vect3 getSpeed() {
 		return speed;
 	}

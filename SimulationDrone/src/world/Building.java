@@ -1,4 +1,8 @@
-package simulationDrones;
+package world;
+
+import physics.collisions.colliders.Collider;
+import physics.collisions.colliders.RectCuboid;
+import utilities.Vect3;
 
 public class Building extends WorldObject {
 
