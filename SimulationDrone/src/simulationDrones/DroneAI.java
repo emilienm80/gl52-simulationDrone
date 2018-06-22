@@ -26,6 +26,7 @@ public class DroneAI {
 		 * @return a 3 component vector containing the direction the drone has to move in
 		 */
 		public static Vect3 updateSpeed(Drone drone, Vect3 goalPosition, Map map) {
+			Vect3 res;
 			Vect3 positionDrone = drone.getPosition();
 			Vect3 speed = new Vect3(positionDrone, goalPosition);
 			
@@ -40,7 +41,52 @@ public class DroneAI {
 			}
 			*/
 			
-			return speed.getNormalized();
+			Vect3 currentSpeed = drone.getSpeed();			
+			double distanceToObjective = speed.norm();		
+			
+			//TODO set propeller angle and motorthrottle
+			
+			drone.setMotorThrottle(1);
+			
+			
+			
+			if(distanceToObjective > 250) {
+				//Normal behavior, head towards the objective
+				drone.setMotorThrottle(1);
+				res = speed.getNormalized();
+			}else {
+				
+				if(currentSpeed.norm() > 10) {
+					//If going fast and close to the objective
+					
+					double angle = currentSpeed.getAngle(speed);
+					Vect3 temp;
+					
+					if(angle > ( Math.PI/2 ) ) {
+						//If the drone is going the wrong way
+						drone.setMotorThrottle(1);
+						
+						temp = speed;
+					}else {
+						//Slowing down phase on approach
+						drone.setMotorThrottle(1);
+						
+						temp = new Vect3(-1*speed.getX(), -1*speed.getY(), speed.getZ());
+					}
+					
+					
+					res = temp.getNormalized();
+				}else {
+					//If not going too fast, we go towards the objective
+					drone.setMotorThrottle(1);
+					res = speed.getNormalized().getMultipliedBy(0.5);
+				}
+				
+				
+			}
+			
+			return res;
+			
 		}
 		
 	}
