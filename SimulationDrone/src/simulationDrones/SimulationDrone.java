@@ -154,11 +154,7 @@ public class SimulationDrone extends Application {
             	
             	Mission mission = new Mission(obj, p);
             	
-<<<<<<< HEAD
-            	Drone d = new Drone(posDepart, speed, size, sph, dc, 20, 0, 0, mission);
-=======
             	Drone d = new Drone(posDepart, speed, size, sph, dc, 80, 0, 0, mission);
->>>>>>> master
             	
             	map.addDrone(d);
             }
