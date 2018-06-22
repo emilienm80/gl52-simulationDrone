@@ -106,7 +106,7 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 	}
 	
 	
-	
+	//TODO put this in worldobject parent class
 	@Override
 	public boolean collideWith(WorldObject w) {
 		//compute new position in this function

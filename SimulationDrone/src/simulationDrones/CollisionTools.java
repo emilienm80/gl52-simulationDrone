@@ -114,9 +114,6 @@ public class CollisionTools {
 	 */
 	public static Vect3 getSphereCenterAfterCollision(RectCuboid rc, Sphere s, Vect3 sphereMovementVector)
 	{
-		System.out.println("Start");
-		System.out.println("1   "+rc+"   "+s);
-		
 		//sphereMovementVector.substract(cuboidMovementVector);//simplifies the problem, assuming that only the sphere moves relatively to the cuboid
 		Vect3 sphereCenter=s.getCenter();
 		boolean centerOutsideCuboid=!rc.containsPoint(sphereCenter);//is the center of the sphere inside or outside the cuboid ?
@@ -134,8 +131,6 @@ public class CollisionTools {
 				collisionPoint=p;
 			}
 		}
-		
-		System.out.println("cp   "+collisionPoint);
 		
 		//we have to move "collisionPoint" away from the cuboid so that the sphere does not intersect with it anymore
 		Vect3 shift=(new Vect3(sphereCenter, collisionPoint)).Normalize().multiplyBy(s.getRadius());
