@@ -111,7 +111,7 @@ public class Map {
         for (WorldObject temp : environment) {
             Collider c2 = temp.getCollider();
 
-            if (CollisionTools.interesect(c1, c2)) {
+            if (CollisionTools.intersect(c1, c2)) {
                 res.add(temp);
             }
 

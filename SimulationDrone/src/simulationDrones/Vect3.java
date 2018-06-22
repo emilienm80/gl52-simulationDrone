@@ -181,7 +181,7 @@ public class Vect3 {
 	}
 	
 	/**
-	 * Multiply pairs of coordinates (x*x,y*y,z*z)
+	 * Multiply pairs of coordinates (x*x,y*y,z*z) = combined product
 	 * @param v
 	 * @return this
 	 */
@@ -347,6 +347,11 @@ public class Vect3 {
 		return (v!=null) && v.x==x && v.y==y && v.z==z; 
 	}
 	
+	//deep copy
+	public Vect3 copy()
+	{
+		return new Vect3(this);
+	}
 
 
 }

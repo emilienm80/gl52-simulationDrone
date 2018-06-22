@@ -2,18 +2,18 @@ package simulationDrones;
 
 public class Sphere extends Collider {
 	
-	private Vect3 center;
 	private double radius;
 	
 	
 	public Sphere()
 	{
-		center=new Vect3(0,0,0);
+		super();
 		radius=0;
 	}
 	
 	public Sphere(Vect3 center, double radius)
 	{
+		this.speed=new Vect3(0,0,0);
 		this.center=new Vect3(center);
 		this.radius=radius;
 		thresholdRadius();
@@ -21,7 +21,9 @@ public class Sphere extends Collider {
 	
 	public Sphere(Sphere s)
 	{
-		this(s.center, s.radius);
+		super(s);
+		this.radius=s.radius;
+		thresholdRadius();
 	}
 	
 	
@@ -41,13 +43,6 @@ public class Sphere extends Collider {
 		if(radius<0) radius=0;
 	}
 
-	public Vect3 getCenter() {
-		return center;
-	}
-
-	public void setCenter(Vect3 center) {
-		this.center = center;
-	}
 
 	public double getRadius() {
 		return radius;
@@ -55,6 +50,17 @@ public class Sphere extends Collider {
 
 	public void setRadius(double radius) {
 		this.radius = radius;
+	}
+
+	@Override
+	public Collider copy() {
+		// TODO Auto-generated method stub
+		return new Sphere(this);
+	}
+
+	@Override
+	public String toString() {
+		return "Sphere [center="+center+" radius=" + radius + "]";
 	}
 
 	

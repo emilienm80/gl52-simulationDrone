@@ -151,7 +151,7 @@ public class SimulationDrone extends Application {
             	
             	Mission mission = new Mission(obj, p);
             	
-            	Drone d = new Drone(posDepart, speed, size, sph, dc, 10, 0, 0, mission);
+            	Drone d = new Drone(posDepart, speed, size, sph, dc, 20, 0, 0, mission);
             	
             	map.addDrone(d);
             }
@@ -280,7 +280,7 @@ public class SimulationDrone extends Application {
         	double width = 2*drone.getCharacteristics().getRadius()*100;//TODO adjust with proper constant (ratio between drone radius in meters and screen size in pixels)
         	
         	//System.out.println(drone.getPosition().getX()+" "+drone.getPosition().getY()+" "+drone.getPosition().getZ()+" "+ width+" "+width);
-        	System.out.println("Pos "+drone.getPosition().toStringLen(50,3)+" Speed "+drone.getSpeed().toStringLen(50,3)+ " Motor consumption "+drone.getMotorConsumption()+" W");
+        	//System.out.println("Pos "+drone.getPosition().toStringLen(50,3)+" Speed "+drone.getSpeed().toStringLen(50,3)+ " Motor consumption "+drone.getMotorConsumption()+" W");
         	
         	gc.fillOval(drone.getPosition().getX(), drone.getPosition().getY(), width, width);
         	

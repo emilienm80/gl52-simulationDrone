@@ -10,26 +10,42 @@ import java.util.Vector;
  */
 public class RectCuboid extends Collider {
 
-	private Vect3 origin;
+	private Vect3 origin;//linked to center, use setters
 	private Vect3 size;//dimensions
 	
 	
 	public RectCuboid()
 	{
-		origin=new Vect3(0,0,0);
+		super();
 		size=new Vect3(0,0,0);
+		setOrigin(new Vect3(0,0,0));
 	}
 	
 	public RectCuboid(Vect3 origin, Vect3 size)
 	{
-		this.origin=new Vect3(origin);
+		speed=new Vect3(0,0,0);
 		this.size=new Vect3(size);
+		setOrigin(new Vect3(origin));
 		thresholdDims();
 	}
 	
 	public RectCuboid(RectCuboid rc)
 	{
-		this(rc.origin, rc.size);
+		super(rc);
+		this.size=new Vect3(rc.size);
+		setOrigin(new Vect3(rc.origin));
+		thresholdDims();
+	}
+	
+	/**
+	 * creates a cuboid centered on "center" 
+	 * @param center
+	 * @param size
+	 * @return a new RectCuboid
+	 */
+	public static RectCuboid createCentered(Vect3 center, Vect3 size)
+	{
+		return new RectCuboid(size.getMultipliedBy(-0.5).add(center), size);
 	}
 	
 	
@@ -61,7 +77,14 @@ public class RectCuboid extends Collider {
 	}
 
 	public void setOrigin(Vect3 origin) {
-		this.origin = origin;
+		this.origin = new Vect3(origin);
+		this.center = this.size.getMultipliedBy(0.5).add(this.origin);
+	}
+
+	@Override
+	public void setCenter(Vect3 center) {
+		this.center = new Vect3(center);
+		this.origin = this.size.getMultipliedBy(-0.5).add(this.center);
 	}
 
 	public Vect3 getSize() {
@@ -79,11 +102,6 @@ public class RectCuboid extends Collider {
 	public Vect3 getTop()
 	{
 		return origin.getAdded(size);
-	}
-	
-	public Vect3 getCenter()
-	{
-		return origin.getAdded(size.getMultipliedBy(0.5));
 	}
 	
 	/*
@@ -111,6 +129,17 @@ public class RectCuboid extends Collider {
 		res.add(new Vect3(p.getX(), p.getY(), origin.getZ() + size.getZ()));
 		
 		return res;
+	}
+
+	@Override
+	public Collider copy() {
+		// TODO Auto-generated method stub
+		return new RectCuboid(this);
+	}
+
+	@Override
+	public String toString() {
+		return "RectCuboid [origin=" + origin + ", size=" + size + "]";
 	}
 	
 }

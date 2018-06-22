@@ -1,6 +1,7 @@
 package simulationDrones;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 import org.w3c.dom.css.Rect;
 
@@ -10,7 +11,6 @@ import sun.text.resources.is.CollationData_is;
 
 public class Drone extends WorldObject /*implements Intelligence*/ {
 
-	private Sphere collidingBox;
 	private DroneCharacteristics characteristics;
 	private DroneAI brain;
 	private double batteryLevel;//W.h=Joules/3600
@@ -77,9 +77,8 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 	 */
 	public Drone(Vect3 position, Vect3 speed, Vect3 size, Sphere colliding, DroneCharacteristics dc, 
 					double batteryLevel, double payload, double motorThrottle, Mission mission) {
-		super(position, speed, size);
+		super(position, speed, size, colliding);
 		
-		this.collidingBox = colliding;
 		this.characteristics = dc;
 		this.brain = null;
 		this.batteryLevel = CollisionTools.limit(0.01*batteryLevel,0,1)*dc.getBatteryCapacity();
@@ -101,7 +100,7 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 		motorThrottle=d.motorThrottle;
 		propellerDirection=new Vect3(d.propellerDirection);
 		
-		collidingBox=new Sphere(position, characteristics.getRadius());
+		collider=createSpecificCollider();
 		
 		mission=new Mission(d.mission);
 	}
@@ -110,17 +109,20 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 	
 	@Override
 	public boolean collideWith(WorldObject w) {
-		// TODO compute new position in this function
+		//compute new position in this function
 		
-		Collider wc=w.getCollider();
+		Collider thiscollider=this.getCollider();
+		Collider wcollider=w.getCollider();
 		
-		if(wc.getClass()==Sphere.class)
+		if(thiscollider.intersectWith(wcollider))//collision occurs
 		{
-			return CollisionTools.intersect((Sphere)this.getCollider(), (Sphere)wc);
-		}
-		else if(wc.getClass()==RectCuboid.class)
-		{
-			return CollisionTools.intersect((RectCuboid)wc, (Sphere)this.getCollider());
+			Vector<Vect3> newpos = Collider.getCollidersCentersAfterCollision(thiscollider, wcollider);
+			
+			//update objects position
+			this.position=newpos.firstElement();
+			w.position=newpos.lastElement();
+
+			return true;
 		}
 		
 		return false;
@@ -140,6 +142,8 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 		if(propDir.getZ()<=0)
 		{
 			System.out.println("Invalid propellerDirection. Did nothing.");
+			//motorThrottle=0;//we could stop motors if drone is flipped over
+			
 			//in this case leaning angle is exceeded and the drone can go in any unwanted direction, but physics will still work as expected
 			//this can be dangerous if the control module doesn't take this into account
 			//we have to link propellerDirection from output of control module to input of updateSpeed
@@ -251,9 +255,9 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 	}
 
 	@Override
-	public Collider getCollider() {
-		collidingBox.setCenter(position);
-		return collidingBox;
+	protected Collider createSpecificCollider() {
+		// TODO Auto-generated method stub
+		return new Sphere(position, characteristics.getRadius());
 	}
 
 	

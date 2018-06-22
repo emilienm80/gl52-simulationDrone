@@ -53,9 +53,9 @@ public class TestMain {
 		System.out.println("s1 center : "+s1Center);
 		System.out.println("s2 center : "+s2Center);
 		
-		System.out.println("\nTime : "+t/1000.0+" µs");
+		System.out.println("\nTime : "+t/1000.0+" Âµs");
 		
-		//getSpheresCentersAtCollision rated at an average execution time around 0.2µs
+		//getSpheresCentersAtCollision rated at an average execution time around 0.2ï¿½s
 	}
 
 }

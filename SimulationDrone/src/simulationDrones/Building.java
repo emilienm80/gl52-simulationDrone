@@ -2,14 +2,13 @@ package simulationDrones;
 
 public class Building extends WorldObject {
 
-    private RectCuboid collidingBox;
     private Station droneStation;
 
     private String name;
 
     public Building() {
         super();
-        collidingBox = new RectCuboid(position, size);
+        collider = createSpecificCollider();
     }
 
     public String getName() {
@@ -27,12 +26,25 @@ public class Building extends WorldObject {
      * @param droneStation the drone station installed on top of the building
      */
     public Building(Vect3 position, Vect3 speed, Vect3 size, RectCuboid collidingBox, Station droneStation, String name) {
-        super(position, speed, size);
-        this.collidingBox = collidingBox;
+        super(position, speed, size, collidingBox);
         this.droneStation = droneStation;
         this.name = name;
     }
 
+    /**
+     * Less redondant constructor.
+     * @param position the vect3 representation of the position of the building
+     * @param size the vect3 representation of the size of the building
+     * @param droneStation the drone station installed on top of the building
+     */
+    public Building(Vect3 position, Vect3 size, Station droneStation, String name) {
+        super(position, new Vect3(0,0,0), size, null);
+        this.droneStation = droneStation;
+        this.name = name;
+        this.collider=createSpecificCollider();
+    }
+    
+    
     //deep copy
     public Building(Building b) {
         super(b);
@@ -40,7 +52,6 @@ public class Building extends WorldObject {
         {
         	droneStation = new Station(b.droneStation);
         }
-        collidingBox = new RectCuboid(position, size);
     }
 
     public boolean hasStation() {
@@ -59,14 +70,14 @@ public class Building extends WorldObject {
         return new Building(this);
     }
 
-    @Override
-    public Collider getCollider() {
-        collidingBox.setOrigin(position);
-        return collidingBox;
-    }
-
     public Station getStation() {
         return this.droneStation;
     }
+
+	@Override
+	protected Collider createSpecificCollider() {
+		// TODO Auto-generated method stub
+		return RectCuboid.createCentered(position, size);
+	}
 
 }
