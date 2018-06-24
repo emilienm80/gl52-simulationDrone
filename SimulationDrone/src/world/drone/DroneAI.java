@@ -49,32 +49,33 @@ public class DroneAI {
 			double distanceToObjective = speed.norm();		
 			
 			//TODO set propeller angle and motorthrottle
-			
 			drone.setMotorThrottle(1);
-			
-			
-			
 			if(distanceToObjective > 250) {
 				//Normal behavior, head towards the objective
 				drone.setMotorThrottle(1);
 				res = speed.getNormalized();
-			}else {
 				
-				if(currentSpeed.norm() > 10) {
+			}else if(distanceToObjective < 15 && currentSpeed.norm() < 25){
+				//Case where drone on final approach
+				drone.setMotorThrottle(0);
+				res = new Vect3(0,0,0);
+			}else {
+				//Case where drone is getting ready for final approach
+				
+				if(currentSpeed.norm() > 25) {
 					//If going fast and close to the objective
 					
+					//Calculate the angle between the current speed and desired speed 
 					double angle = currentSpeed.getAngle(speed);
 					Vect3 temp;
 					
 					if(angle > ( Math.PI/2 ) ) {
 						//If the drone is going the wrong way
 						drone.setMotorThrottle(1);
-						
-						temp = speed;
+						temp = speed.getMultipliedBy(0.5);
 					}else {
 						//Slowing down phase on approach
 						drone.setMotorThrottle(1);
-						
 						temp = new Vect3(-1*speed.getX(), -1*speed.getY(), speed.getZ());
 					}
 					
