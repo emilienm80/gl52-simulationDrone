@@ -1,4 +1,4 @@
-package simulationDrones;
+package world.drone;
 
 import java.util.ArrayList;
 

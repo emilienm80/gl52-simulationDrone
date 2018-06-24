@@ -1,4 +1,8 @@
-package simulationDrones;
+package world.drone;
+
+import world.Map;
+import utilities.Vect3;
+import physics.collisions.colliders.*;
 
 public class DroneAI {
 	

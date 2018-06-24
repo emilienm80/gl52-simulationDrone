@@ -1,4 +1,6 @@
-package simulationDrones;
+package physics.collisions.colliders;
+
+import utilities.Vect3;
 
 public class Sphere extends Collider {
 	

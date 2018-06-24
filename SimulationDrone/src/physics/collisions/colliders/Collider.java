@@ -1,6 +1,8 @@
-package simulationDrones;
+package physics.collisions.colliders;
 
 import java.util.Vector;
+import utilities.Vect3;
+import physics.collisions.CollisionTools;
 
 public abstract class Collider {
 	

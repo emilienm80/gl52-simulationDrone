@@ -1,4 +1,4 @@
-package simulationDrones;
+package world.drone;
 
 import java.util.ArrayList;
 import java.util.Vector;
@@ -8,6 +8,13 @@ import org.w3c.dom.css.Rect;
 import com.sun.media.sound.InvalidDataException;
 
 import sun.text.resources.is.CollationData_is;
+
+import world.*;
+
+import utilities.Vect3;
+import physics.collisions.CollisionTools;
+import physics.collisions.colliders.*;
+import physics.PhysicsEngine;
 
 public class Drone extends WorldObject /*implements Intelligence*/ {
 
@@ -120,7 +127,7 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 			
 			//update objects position
 			this.position=newpos.firstElement();
-			w.position=newpos.lastElement();
+			w.setPosition(newpos.lastElement());
 
 			return true;
 		}

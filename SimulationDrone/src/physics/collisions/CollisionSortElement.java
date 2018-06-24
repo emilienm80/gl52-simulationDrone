@@ -1,4 +1,6 @@
-package simulationDrones;
+package physics.collisions;
+
+import world.WorldObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
