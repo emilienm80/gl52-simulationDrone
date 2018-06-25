@@ -19,10 +19,15 @@ public class Map {
     //building
     private ArrayList<WorldObject> environment = new ArrayList<WorldObject>(); //buildings, stations and everything
     private Constantes Const;
+    
+    private void createLimitBox()
+    {
+    	limitsbox = new RectCuboid(new Vect3(0, 0, 0), new Vect3(Const.CANVAS_WIDTH/Constantes.MeterToPixel, Const.CANVAS_HEIGHT/Constantes.MeterToPixel, 500));
+    }
 
     public Map() {
         Const = new Constantes();
-        limitsbox = new RectCuboid(new Vect3(0, 0, 0), new Vect3(Const.CANVAS_WIDTH, Const.CANVAS_HEIGHT, 500));
+        createLimitBox();
         
         /*
         //Generates dumb dumb dumb basic map

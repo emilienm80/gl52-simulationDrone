@@ -313,7 +313,15 @@ public class Vect3 {
 
 		return res=res.substring(0, len);
 	}
-
+	
+	/**
+	 * 
+	 * @return string formatted in dimensions (XxYxZ)
+	 */
+	public String toIntDimensions()
+	{
+		return (int)(x+0.5)+"x"+(int)(y+0.5)+"x"+(int)(z+0.5);
+	}
 
 
 	@Override

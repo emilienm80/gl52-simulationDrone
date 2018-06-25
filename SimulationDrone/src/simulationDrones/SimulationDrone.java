@@ -7,6 +7,8 @@ package simulationDrones;
 
 import java.util.ArrayList;
 
+import com.sun.org.apache.regexp.internal.recompile;
+
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -56,8 +58,11 @@ import world.drone.Priority;
  *
  * @author Emilien
  */
+
+//TODO create functions to draw each type of object, to make clearer code
 public class SimulationDrone extends Application {
 
+	private Rectangle2D viewCamRect;
     private Constantes Const;
     private int compt;
     private Group framePanel;
@@ -256,6 +261,7 @@ public class SimulationDrone extends Application {
         compt = 100;
 
         final Canvas canvas = new Canvas(Const.CANVAS_WIDTH, Const.CANVAS_HEIGHT);
+        viewCamRect=new Rectangle2D(0, 0, Const.CANVAS_WIDTH, Const.CANVAS_HEIGHT);//current view area
         canvas.setTranslateX((Const.BORDER_FRAME * 2) + Const.GROUPBOX_WIDTH);
         canvas.setTranslateY(Const.BORDER_FRAME);
         Draw(canvas.getGraphicsContext2D());
@@ -288,11 +294,12 @@ public class SimulationDrone extends Application {
             gc.setFill(Color.web("#888888"));
             Rectangle2D r=getDrawingRect(building);
             gc.fillRect(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
+            gc.setFill(Color.WHITE);
+            gc.fillText(building.getName()+"\n"+building.getSize().toIntDimensions(), r.getMinX() + Const.BORDER_FRAME*0.25, r.getMinY() + Const.BORDER_FRAME*0.5, 100);
             //gc.fillRect(building.getPosition().getX(), building.getPosition().getY(), building.getSize().getX(), building.getSize().getY());
             
             if (building.getStation() != null){
                 gc.setFill(Color.WHITE);
-                gc.fillText(building.getName(), building.getPosition().getX() + Const.BORDER_FRAME, building.getPosition().getY() + Const.BORDER_FRAME, 100);
                 r=getDrawingRect(building.getStation());
                 gc.fillRect(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
                 //gc.fillRect(building.getStation().getPosition().getX(), building.getStation().getPosition().getY(), building.getStation().getSize().getX(), building.getStation().getSize().getY());                
@@ -303,23 +310,38 @@ public class SimulationDrone extends Application {
         ArrayList<Drone> drones = map.getDrone();
         
         for(Drone drone : drones) {
-                //System.out.println("ici");
         	gc.setFill(Color.web("#121212"));
-        	double width = 2*drone.getCharacteristics().getRadius()*100;//TODO adjust with proper constant (ratio between drone radius in meters and screen size in pixels)
+        	//double width = 2*drone.getCharacteristics().getRadius()*100;//TODO adjust with proper constant (ratio between drone radius in meters and screen size in pixels)
         	
         	//System.out.println(drone.getPosition().getX()+" "+drone.getPosition().getY()+" "+drone.getPosition().getZ()+" "+ width+" "+width);
         	//System.out.println("Pos "+drone.getPosition().toStringLen(50,3)+" Speed "+drone.getSpeed().toStringLen(50,3)+ " Motor consumption "+drone.getMotorConsumption()+" W");
         	
         	//gc.fillOval(drone.getPosition().getX(), drone.getPosition().getY(), width, width);
         	Rectangle2D r=getDrawingRect(drone);
-        	gc.fillOval(r.getMinX(), r.getMinY(), width, width);
+        	gc.fillOval(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
         	
-        	gc.fillText("z="+CollisionTools.round(drone.getPosition().getZ(),2), drone.getPosition().getX(), drone.getPosition().getY());
-        	gc.fillText(CollisionTools.round(drone.getBatteryLevelRelative()*100,1) +"%", drone.getPosition().getX(), drone.getPosition().getY()+width*2);
+        	gc.fillText("z="+CollisionTools.round(drone.getPosition().getZ(),2), r.getMinX(), r.getMinY());
+        	gc.fillText(CollisionTools.round(drone.getBatteryLevelRelative()*100,1) +"%", r.getMinX(), r.getMinY()+30);
         }
     }
     
+    /**
+     * returns the drawing rect of a world object, ready to be drawn on screen
+     * @param w
+     * @return
+     */
     private Rectangle2D getDrawingRect(WorldObject w)
+    {
+    	//TODO use precomputed constants to avoid too much subfunctions calls
+    	return getDrawingRectInPixels(getFittedToViewCamera(getRawDrawingRect(w)));    	
+    }
+    
+    private Rectangle2D getDrawingRectInPixels(Rectangle2D r)
+    {
+    	return new Rectangle2D(r.getMinX()*Constantes.MeterToPixel, r.getMinY()*Constantes.MeterToPixel, r.getWidth()*Constantes.MeterToPixel, r.getHeight()*Constantes.MeterToPixel);
+    }
+    
+    private Rectangle2D getRawDrawingRect(WorldObject w)
     {
     	Collider wcol=w.getCollider();
     	
@@ -336,7 +358,34 @@ public class SimulationDrone extends Application {
     		return new Rectangle2D(c.getX()-s.getX()*0.5, c.getY()-s.getY()*0.5, s.getX(), s.getY());
     	}
     	
-    	return null;
+    	return new Rectangle2D(0,0,0,0);
+    }
+    
+    /**
+     * fit the drawing rect according to the view rectangle
+     * @param r
+     * @return
+     */
+    private Rectangle2D getFittedToViewCamera(Rectangle2D r)
+    {
+    	return new Rectangle2D(	r.getMinX()-viewCamRect.getMinX(), 
+    							r.getMinY()-viewCamRect.getMinY(), 
+    							r.getWidth()*Const.CANVAS_WIDTH/viewCamRect.getWidth(), 
+    							r.getHeight()*Const.CANVAS_HEIGHT/viewCamRect.getHeight());
+    }
+    
+    /**
+     * set the zoom of map display canvas, and center the view area
+     * @param zoom
+     */
+    public void setZoom(double zoom)
+    {
+    	if(zoom<=0) zoom=1;
+    	
+    	double w=Const.CANVAS_WIDTH/zoom;
+    	double h=Const.CANVAS_HEIGHT/zoom;
+    	
+    	viewCamRect=new Rectangle2D(0.5*(Const.CANVAS_WIDTH-w), 0.5*(Const.CANVAS_HEIGHT-h), w, h);
     }
 
 }
