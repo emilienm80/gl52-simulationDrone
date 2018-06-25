@@ -164,7 +164,7 @@ public class SimulationDrone extends Application {
             	Station stationDepart = buildingDepart.getStation();
             	
             	Vect3 posDepart = stationDepart.getPosition();
-            	posDepart.setZ(buildingDepart.getSize().getZ()+stationDepart.getPosition().getZ());
+            	posDepart.setZ(buildingDepart.getSize().getZ()+stationDepart.getSize().getZ()+10);
             	Vect3 speed = new Vect3(0,0,0);
             	Vect3 size = new Vect3(0,0,0);
             	Sphere sph = new Sphere(posDepart, dc.getRadius());
@@ -173,7 +173,7 @@ public class SimulationDrone extends Application {
             	Station stationArr = buildingArr.getStation();
             	
             	Vect3 posArr = stationArr.getPosition();
-            	posArr.setZ(buildingArr.getSize().getZ()+stationArr.getPosition().getZ());
+            	posArr.setZ(buildingArr.getSize().getZ()+stationArr.getSize().getZ());
             	
             	Objective obj = new Objective(posArr);
             	

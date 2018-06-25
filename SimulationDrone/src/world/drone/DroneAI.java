@@ -54,12 +54,12 @@ public class DroneAI {
 			
 			//TODO set propeller angle and motorthrottle
 			drone.setMotorThrottle(1);
-			if(distanceToObjective > 250) {
+			if(distanceToObjective > 350) {
 				//Normal behavior, head towards the objective
 				drone.setMotorThrottle(1);
 				res = speed.getNormalized();
 				
-			}else if(distanceToObjective < 15 && currentSpeed.norm() < 25){
+			}else if(distanceToObjective < 25 && currentSpeed.norm() < 25){
 				//Case where drone on final approach
 				drone.setMotorThrottle(0);
 				res = new Vect3(0,0,0);
