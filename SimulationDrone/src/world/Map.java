@@ -72,7 +72,7 @@ public class Map {
         environment.add(RightBottom);
         */
         
-        environment.addAll(createBuildings(6, 1, false));//there is a problem with overlapping
+        environment.addAll(createBuildings(6, 1, false));
         
         
         //Vect3 positionStation = new Vect3(i * 50, i * 50, size.getZ());
@@ -104,7 +104,7 @@ public class Map {
     		do
     		{
 	    		Vect3 rndSize=new Vect3(UsF.getRandomWithin(minsf, maxsf)*size.getY(), UsF.getRandomWithin(minsf, maxsf)*size.getY(), UsF.getRandomWithin(minsf, maxsf)*size.getZ());
-	    		Vect3 rndPos=new Vect3(center.getX() + UsF.getRandomWithin(-0.5, 0.5)*(size.getX()-rndSize.getX()), center.getY() + UsF.getRandomWithin(-0.5, 0.5)*(size.getY()-rndSize.getY()), center.getZ() + UsF.getRandomWithin(-0.5, 0.5)*(size.getZ()-rndSize.getZ()));//guarantees a little space between buildings and map boundaries
+	    		Vect3 rndPos=new Vect3(center.getX() + UsF.getRandomWithin(-0.5, 0.5)*(size.getX()-rndSize.getX()), center.getY() + UsF.getRandomWithin(-0.5, 0.5)*(size.getY()-rndSize.getY()), 0.5*rndSize.getZ());//guarantees a little space between buildings and map boundaries
 	    		
 	            RectCuboid rc = RectCuboid.createCentered(rndPos, rndSize);
 	            
