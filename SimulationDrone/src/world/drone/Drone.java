@@ -307,18 +307,18 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 		return new Sphere(position, characteristics.getRadius());
 	}
         
-        public boolean inRangeDrone(Drone drone) {
-            Vect3 vect = getPosition();
-            Double dist = vect.dist(drone.getPosition());
-            boolean isInRange = (characteristics.getCommunicationRange() <= dist) && (drone.characteristics.getCommunicationRange() <= dist);
-            return isInRange;
-        }
+    public boolean inRangeDrone(Drone drone) {
+        Vect3 vect = getPosition();
+        Double dist = vect.dist(drone.getPosition());
+        boolean isInRange = (characteristics.getCommunicationRange() <= dist) && (drone.characteristics.getCommunicationRange() <= dist);
+        return isInRange;
+    }
 
-        public boolean inRangeStation(Station station) {
-            Vect3 vect = getPosition();
-            Double dist = vect.dist(station.getPosition());
-            boolean isInRange = (characteristics.getCommunicationRange() <= dist);
-            return isInRange;
-        }
+    public boolean inRangeStation(Station station) {
+        Vect3 vect = getPosition();
+        Double dist = vect.dist(station.getPosition());
+        boolean isInRange = (characteristics.getCommunicationRange() <= dist);
+        return isInRange;
+    }
     
 }
