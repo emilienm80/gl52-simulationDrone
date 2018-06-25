@@ -93,6 +93,7 @@ public class Map {
     	
     	Vect3 center=limitsbox.getCenter();//map center
     	Vect3 size=limitsbox.getSize();//map size
+    	double optsizef=Math.min(size.getX(), size.getY());
     	double minsf=0.2;//min building size relative to map size
     	double maxsf=0.1;//max building size relative to map size
     	double stf=0.3;//sizefactor of stations relative to building upper surface dimensions
@@ -103,7 +104,7 @@ public class Map {
     		
     		do
     		{
-	    		Vect3 rndSize=new Vect3(UsF.getRandomWithin(minsf, maxsf)*size.getY(), UsF.getRandomWithin(minsf, maxsf)*size.getY(), UsF.getRandomWithin(minsf, maxsf)*size.getZ());
+	    		Vect3 rndSize=new Vect3(UsF.getRandomWithin(minsf, maxsf)*optsizef, UsF.getRandomWithin(minsf, maxsf)*optsizef, UsF.getRandomWithin(minsf, maxsf)*size.getZ());
 	    		Vect3 rndPos=new Vect3(center.getX() + UsF.getRandomWithin(-0.5, 0.5)*(size.getX()-rndSize.getX()), center.getY() + UsF.getRandomWithin(-0.5, 0.5)*(size.getY()-rndSize.getY()), 0.5*rndSize.getZ());//guarantees a little space between buildings and map boundaries
 	    		
 	            RectCuboid rc = RectCuboid.createCentered(rndPos, rndSize);
