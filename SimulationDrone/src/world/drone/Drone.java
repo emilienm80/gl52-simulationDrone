@@ -25,6 +25,9 @@ import physics.PhysicsEngine;
 
 public class Drone extends WorldObject /*implements Intelligence*/ {
 
+	private static int TotalNbOfDrones=0;//used to generate unique drone id
+	
+	private int id;
 	private DroneCharacteristics characteristics;
 	private DroneAI brain;
 	private double batteryLevel;//W.h=Joules/3600
@@ -34,6 +37,10 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 	private Station pluggedStation;//null if not connected to any station for recharging
 	
 	private Mission mission;
+	
+	public int getId() {
+		return id;
+	}
 	
 	public DroneCharacteristics getCharacteristics() {
 		return characteristics;
@@ -93,6 +100,7 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 					double batteryLevel, double payload, double motorThrottle, Mission mission) {
 		super(position, speed, size, colliding);
 		
+		this.id=getNewId();
 		this.characteristics = dc;
 		this.brain = new DroneAI();
 		this.batteryLevel = CollisionTools.limit(0.01*batteryLevel,0,1)*dc.getBatteryCapacity();
@@ -107,6 +115,7 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 	{
 		super(d);
 		
+		id=getNewId();
 		characteristics=d.characteristics;
 		brain=d.brain;
 		batteryLevel=d.batteryLevel;
@@ -117,6 +126,12 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 		collider=createSpecificCollider();
 		
 		mission=new Mission(d.mission);
+	}
+	
+	private int getNewId()
+	{
+		TotalNbOfDrones++;
+		return TotalNbOfDrones;
 	}
 	
 	
@@ -289,6 +304,7 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 		
 	}
 	
+
 	
 	@Override
 	public WorldObject copy() {

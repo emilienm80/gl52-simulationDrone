@@ -11,6 +11,7 @@ import utilities.Vect3;
 public class Message {
 	
 	protected String text;
+	protected int id;
 	protected Vect3 position;
 	protected Vect3 speed;
 	protected Vect3 targetPos;
