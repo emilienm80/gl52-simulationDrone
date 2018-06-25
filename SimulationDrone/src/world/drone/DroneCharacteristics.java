@@ -51,6 +51,8 @@ public class DroneCharacteristics {
 	        	communicationRange=20;
 	            break;
 	        case Standard://based on DJI Spark
+	        	propellerLift=0.035;
+	    		airDrag=0.012;
 	        	maxLeaningAngle=25;
 	        	radius=0.11;
 	        	motorEfficiency=0.85;
@@ -74,6 +76,8 @@ public class DroneCharacteristics {
 	        	communicationRange=;
 	            break;*/
 	        case Transporter://based on DJI S900
+	        	propellerLift=0.04;
+	    		airDrag=0.02;
 	        	maxLeaningAngle=20;
 	        	radius=0.5;
 	        	motorEfficiency=0.9;

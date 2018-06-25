@@ -43,8 +43,9 @@ public class PhysicsEngine {
 				d.updateMe(time);
 				//Vect3 goalPosition = d.getNextObjective().getPosition(); -> bug !
 				//d.setTargetDirection(DroneAI.AI.updateSpeed(d, goalPosition, map));
-				//d.setPropellerDirection(new Vect3(1,0.5,1));//for testing only. the drone should be further controlled with a command module
-								
+				//d.setPropellerDirection(new Vect3(1,0.5,1));//for testing only. the drone should be further controlled with a command module		
+				
+				
 				Vect3 goalPosition = d.getNextObjective().getPosition();
 				d.setPropellerDirection(DroneAI.AI.updateSpeed(d, goalPosition, map));
 			}

@@ -94,7 +94,7 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 		super(position, speed, size, colliding);
 		
 		this.characteristics = dc;
-		this.brain = null;
+		this.brain = new DroneAI();
 		this.batteryLevel = CollisionTools.limit(0.01*batteryLevel,0,1)*dc.getBatteryCapacity();
 		this.payload = payload;
 		this.motorThrottle = motorThrottle;
@@ -199,6 +199,7 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 		
 		dischargeBattery(time);
 		
+		decide(time);
 	}
 	
 	private void updateSpeed(double time)
@@ -279,6 +280,15 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 		return this.pluggedStation!=null;
 	}
 	
+	/**
+	 * Perform actions according to environment and drone parameters
+	 * This is what makes our system multi-agent
+	 */
+	public void decide(double time)
+	{
+		
+	}
+	
 	
 	@Override
 	public WorldObject copy() {
@@ -307,17 +317,17 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 		return new Sphere(position, characteristics.getRadius());
 	}
         
-    public boolean inRangeDrone(Drone drone) {
+    public boolean inComRangeDrone(Drone drone) {
         Vect3 vect = getPosition();
         Double dist = vect.dist(drone.getPosition());
-        boolean isInRange = (characteristics.getCommunicationRange() <= dist) && (drone.characteristics.getCommunicationRange() <= dist);
+        boolean isInRange = (characteristics.getCommunicationRange() >= dist) && (drone.characteristics.getCommunicationRange() >= dist);
         return isInRange;
     }
 
-    public boolean inRangeStation(Station station) {
+    public boolean inComRangeStation(Station station) {
         Vect3 vect = getPosition();
         Double dist = vect.dist(station.getPosition());
-        boolean isInRange = (characteristics.getCommunicationRange() <= dist);
+        boolean isInRange = (characteristics.getCommunicationRange() >= dist);
         return isInRange;
     }
     
