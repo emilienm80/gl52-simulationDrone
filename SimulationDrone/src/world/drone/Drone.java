@@ -134,6 +134,10 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 			//update objects position
 			this.setPosition(newpos.firstElement());
 			w.setPosition(newpos.lastElement());
+			
+			System.out.println(newpos.firstElement());
+			System.out.println(newpos.lastElement());
+			
 
 			return true;
 		}

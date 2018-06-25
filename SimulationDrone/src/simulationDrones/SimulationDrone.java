@@ -18,6 +18,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -34,12 +35,15 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import physics.PhysicsEngine;
 import physics.collisions.CollisionTools;
+import physics.collisions.colliders.Collider;
+import physics.collisions.colliders.RectCuboid;
 import physics.collisions.colliders.Sphere;
 import utilities.Constantes;
 import utilities.Vect3;
 import world.Building;
 import world.Map;
 import world.Station;
+import world.WorldObject;
 import world.drone.Drone;
 import world.drone.DroneCharacteristics;
 import world.drone.DroneType;
@@ -282,11 +286,16 @@ public class SimulationDrone extends Application {
         gc.fillRect(0, 0, Const.CANVAS_WIDTH, Const.CANVAS_HEIGHT);
         for (Building building : buildings) {
             gc.setFill(Color.web("#888888"));
-            gc.fillRect(building.getPosition().getX(), building.getPosition().getY(), building.getSize().getX(), building.getSize().getY());
+            Rectangle2D r=getDrawingRect(building);
+            gc.fillRect(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
+            //gc.fillRect(building.getPosition().getX(), building.getPosition().getY(), building.getSize().getX(), building.getSize().getY());
+            
             if (building.getStation() != null){
                 gc.setFill(Color.WHITE);
                 gc.fillText(building.getName(), building.getPosition().getX() + Const.BORDER_FRAME, building.getPosition().getY() + Const.BORDER_FRAME, 100);
-                gc.fillRect(building.getStation().getPosition().getX(), building.getStation().getPosition().getY(), building.getStation().getSize().getX(), building.getStation().getSize().getY());                
+                r=getDrawingRect(building.getStation());
+                gc.fillRect(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
+                //gc.fillRect(building.getStation().getPosition().getX(), building.getStation().getPosition().getY(), building.getStation().getSize().getX(), building.getStation().getSize().getY());                
             }
 
         }
@@ -301,11 +310,35 @@ public class SimulationDrone extends Application {
         	//System.out.println(drone.getPosition().getX()+" "+drone.getPosition().getY()+" "+drone.getPosition().getZ()+" "+ width+" "+width);
         	//System.out.println("Pos "+drone.getPosition().toStringLen(50,3)+" Speed "+drone.getSpeed().toStringLen(50,3)+ " Motor consumption "+drone.getMotorConsumption()+" W");
         	
-        	gc.fillOval(drone.getPosition().getX(), drone.getPosition().getY(), width, width);
+        	//gc.fillOval(drone.getPosition().getX(), drone.getPosition().getY(), width, width);
+        	Rectangle2D r=getDrawingRect(drone);
+        	gc.fillOval(r.getMinX(), r.getMinY(), width, width);
         	
         	gc.fillText("z="+CollisionTools.round(drone.getPosition().getZ(),2), drone.getPosition().getX(), drone.getPosition().getY());
         	gc.fillText(CollisionTools.round(drone.getBatteryLevelRelative()*100,1) +"%", drone.getPosition().getX(), drone.getPosition().getY()+width*2);
+        	gc.fillText(""+drone.getPosition(), drone.getPosition().getX(), drone.getPosition().getY()-width);
         }
+    }
+    
+    private Rectangle2D getDrawingRect(WorldObject w)
+    {
+    	Collider wcol=w.getCollider();
+    	
+    	if(wcol instanceof Sphere)
+    	{
+    		Vect3 c=wcol.getCenter();
+    		double r=((Sphere) wcol).getRadius();
+    		return new Rectangle2D(c.getX()-r, c.getY()-r, 2*r, 2*r);
+    	}
+    	else if(wcol instanceof RectCuboid)
+    	{
+    		Vect3 c=wcol.getCenter();
+    		Vect3 s=((RectCuboid) wcol).getSize();
+    		return new Rectangle2D(c.getX()-s.getX()*0.5, c.getY()-s.getY()*0.5, s.getX(), s.getY());
+    	}
+    	
+    	return null;
     }
 
 }
+
