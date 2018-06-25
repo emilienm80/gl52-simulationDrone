@@ -33,9 +33,6 @@ import utilities.Vect3;
  */
 public class CollisionTools {
 
-	//move these elsewhere (maybe in Constants class ?)
-	public static final double DegToRad=Math.PI/180;
-	public static final double WsToWh=1.0/3600; //watt per second to watt per hour
 	
 	/**
 	 * 

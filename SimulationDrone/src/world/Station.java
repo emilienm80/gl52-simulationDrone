@@ -74,7 +74,7 @@ public class Station extends WorldObject {
 	@Override
 	protected Collider createSpecificCollider() {
 		// TODO Auto-generated method stub
-		return new RectCuboid(position, size);
+		return RectCuboid.createCentered(position, size);
 	}
 
 

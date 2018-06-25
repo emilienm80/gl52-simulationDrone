@@ -316,7 +316,6 @@ public class SimulationDrone extends Application {
         	
         	gc.fillText("z="+CollisionTools.round(drone.getPosition().getZ(),2), drone.getPosition().getX(), drone.getPosition().getY());
         	gc.fillText(CollisionTools.round(drone.getBatteryLevelRelative()*100,1) +"%", drone.getPosition().getX(), drone.getPosition().getY()+width*2);
-        	gc.fillText(""+drone.getPosition(), drone.getPosition().getX(), drone.getPosition().getY()-width);
         }
     }
     

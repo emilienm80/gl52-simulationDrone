@@ -96,6 +96,7 @@ public class RectCuboid extends Collider {
 
 	public void setSize(Vect3 size) {
 		this.size = size;
+		thresholdDims();
 	}
 	
 	/**

@@ -12,6 +12,7 @@ import physics.collisions.CollisionTools;
 import physics.collisions.colliders.Collider;
 import physics.collisions.colliders.Sphere;
 import sun.text.resources.is.CollationData_is;
+import utilities.Constantes;
 import utilities.Vect3;
 import world.WorldObject;
 
@@ -168,7 +169,7 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 		}
 		
 		Vect3 propDirNormalizedZ=propDir.getMultipliedBy(1/propDir.getZ());//normalize on z axis
-		double maxHspeedNormalized=Math.sin(characteristics.getMaxLeaningAngle()*CollisionTools.DegToRad);
+		double maxHspeedNormalized=Math.sin(characteristics.getMaxLeaningAngle()*Constantes.DegToRad);
 		propDirNormalizedZ.setZ(0);
 		double propDirHspeedNormalized=propDirNormalizedZ.norm();
 		if(propDirHspeedNormalized>maxHspeedNormalized)
@@ -215,7 +216,7 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 	
 	private void dischargeBattery(double time)
 	{
-		batteryLevel-=getMotorConsumption()*time*CollisionTools.WsToWh;
+		batteryLevel-=getMotorConsumption()*time*Constantes.WsToWh;
 		if(batteryLevel<0)
 		{
 			batteryLevel=0;
@@ -244,7 +245,7 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 	
 	private void rechargeBattery(double time)
 	{
-		batteryLevel+=characteristics.getBatteryRechargingRate()*time*CollisionTools.WsToWh;
+		batteryLevel+=characteristics.getBatteryRechargingRate()*time*Constantes.WsToWh;
 		if(batteryLevel>characteristics.getBatteryCapacity())
 		{
 			batteryLevel=characteristics.getBatteryCapacity();

@@ -2,10 +2,13 @@ package world;
 
 import java.util.ArrayList;
 
+import com.sun.java_cup.internal.runtime.virtual_parse_stack;
+
 import physics.collisions.CollisionTools;
 import physics.collisions.colliders.Collider;
 import physics.collisions.colliders.RectCuboid;
 import utilities.Constantes;
+import utilities.UsF;
 import utilities.Vect3;
 import world.drone.Drone;
 
@@ -20,7 +23,8 @@ public class Map {
     public Map() {
         Const = new Constantes();
         limitsbox = new RectCuboid(new Vect3(0, 0, 0), new Vect3(Const.CANVAS_WIDTH, Const.CANVAS_HEIGHT, 500));
-
+        
+        /*
         //Generates dumb dumb dumb basic map
         Station stationLeftTop = new Station(new Vect3(100, 425, 0), new Vect3(0, 0, 0), new Vect3(50, 50, 200));
         RectCuboid rectLeftTop = new RectCuboid(new Vect3(50, 350, 0), new Vect3(150, 200, 200));
@@ -66,12 +70,80 @@ public class Map {
         environment.add(RightTop);
         environment.add(RightCenter);
         environment.add(RightBottom);
+        */
+        
+        environment.addAll(createBuildings(6, 1, false));//there is a problem with overlapping
         
         
         //Vect3 positionStation = new Vect3(i * 50, i * 50, size.getZ());
         //Vect3 sizeStation = new Vect3(size.getX(), size.getY(), 0);
         //Station station = new Station(positionStation, sizeStation, speed);
     }
+    
+    /**
+     * Randomly creates buildings with stations in the map
+     * 
+     * @param nbBuildings number of buildings to be generated
+     * @param stationProba probability of a station spawning on each generated building
+     * @param allowOverlap allow building overlapping on X,Y coordinates
+     */
+    private ArrayList<Building> createBuildings(int nbBuildings, double stationProba, boolean allowOverlap)
+    {
+    	ArrayList<Building> createdBuildings=new ArrayList<Building>();
+    	
+    	Vect3 center=limitsbox.getCenter();//map center
+    	Vect3 size=limitsbox.getSize();//map size
+    	double minsf=0.2;//min building size relative to map size
+    	double maxsf=0.1;//max building size relative to map size
+    	double stf=0.3;//sizefactor of stations relative to building upper surface dimensions
+    	
+    	for(int i=0; i<nbBuildings;i++)
+    	{
+    		Building b;
+    		
+    		do
+    		{
+	    		Vect3 rndSize=new Vect3(UsF.getRandomWithin(minsf, maxsf)*size.getY(), UsF.getRandomWithin(minsf, maxsf)*size.getY(), UsF.getRandomWithin(minsf, maxsf)*size.getZ());
+	    		Vect3 rndPos=new Vect3(center.getX() + UsF.getRandomWithin(-0.5, 0.5)*(size.getX()-rndSize.getX()), center.getY() + UsF.getRandomWithin(-0.5, 0.5)*(size.getY()-rndSize.getY()), center.getZ() + UsF.getRandomWithin(-0.5, 0.5)*(size.getZ()-rndSize.getZ()));//guarantees a little space between buildings and map boundaries
+	    		
+	            RectCuboid rc = RectCuboid.createCentered(rndPos, rndSize);
+	            
+	            Station st=null;
+	            if(Math.random()<stationProba)
+	            {
+	            	st=new Station(rc.getCenter(), new Vect3(0, 0, 0), rc.getSize().getMultipliedBy(stf));
+	            }
+	            
+	            b = new Building(rc.getCenter(), new Vect3(0, 0, 0), rc.getSize(), rc, st, "Building "+i);
+	            
+    		}while(!allowOverlap && overlaps(b, createdBuildings));//temporary loop solution, can be very inefficient in computing time when building size is not negligible against map size and nb buildings is high
+    		
+    		createdBuildings.add(b);
+    	}
+    	
+    	return createdBuildings;
+    }
+    
+    /**
+     * true if b overlaps with at least one of the buildings in bl
+     * @param b
+     * @param bl
+     * @return
+     */
+    private boolean overlaps(Building b, ArrayList<Building> bl)
+    {
+    	for (WorldObject bi: bl)
+    	{
+    		if(CollisionTools.intersect(bi.getCollider(), b.getCollider()))
+    		{
+    			return true;
+    		}
+    	}
+    	
+    	return false;
+    }
+    
+    
 
     /**
      * Returns all buildings with stations on top
