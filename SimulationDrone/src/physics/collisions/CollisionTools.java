@@ -5,6 +5,11 @@ import java.util.Vector;
 import utilities.Vect3;
 import physics.collisions.colliders.*;
 
+import physics.collisions.colliders.Collider;
+import physics.collisions.colliders.RectCuboid;
+import physics.collisions.colliders.Sphere;
+import utilities.Vect3;
+
 //TODO add weight factors for collision between cuboid and sphere with 2 speeds
 
 //TODO support collision between moving sphere and rectcuboid

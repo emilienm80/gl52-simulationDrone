@@ -3,9 +3,13 @@ package world;
 import physics.collisions.colliders.Collider;
 import physics.collisions.colliders.RectCuboid;
 import utilities.Vect3;
+import world.drone.Drone;
 
 public class Station extends WorldObject {
 
+	//we assume for simplicity that only a drone at a time can be plugged to station, but we could easily improve that if we have time
+	private Drone pluggedDrone;//plugged drone for recharging, if null, not plugged to any drone
+	
 	public Station() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -38,6 +42,26 @@ public class Station extends WorldObject {
 	public WorldObject copy() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public void plugToDrone(Drone d)
+	{
+		this.pluggedDrone=d;
+	}
+	
+	public void unplugFromDrone()
+	{
+		this.pluggedDrone=null;
+	}
+	
+	public boolean isPluggedToDrone()
+	{
+		return this.pluggedDrone!=null;
+	}
+	
+	public boolean isPluggedToDrone(Drone d)
+	{
+		return this.pluggedDrone==d;
 	}
 
 

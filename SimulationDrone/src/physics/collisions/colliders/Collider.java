@@ -4,6 +4,9 @@ import java.util.Vector;
 import utilities.Vect3;
 import physics.collisions.CollisionTools;
 
+import physics.collisions.CollisionTools;
+import utilities.Vect3;
+
 public abstract class Collider {
 	
 	protected Vect3 center;//position of this collider's center

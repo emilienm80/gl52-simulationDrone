@@ -7,6 +7,8 @@ import java.util.Collection;
 
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
+import world.WorldObject;
+
 /**
  * used to store an association of objects and their distance for sorting according to this distance.
  * The distance is between the object referenced in this class and another object that doesn't need to be referenced

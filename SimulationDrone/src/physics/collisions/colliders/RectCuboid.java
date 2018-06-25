@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import utilities.Vect3;
 
 
+import utilities.Vect3;
+
 /**
  * 
  * 3D rectangle : Rectangular cuboid

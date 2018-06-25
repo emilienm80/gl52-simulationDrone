@@ -64,6 +64,7 @@ public class PhysicsEngine {
 		//this list will hold couple of (worldobject, distance) to allow further sorting
 		ArrayList<CollisionSortElement> cDistList=new ArrayList<CollisionSortElement>();
 		
+		//select only close enough objects to take in account a possible collision
 		for(WorldObject w : world)
 		{
 			double distBetweenObjs=w.getPosition().squaredDist(obj.getPosition());//squared dist is faster to compute

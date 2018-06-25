@@ -3,6 +3,10 @@ package world.drone;
 import world.Map;
 import utilities.Vect3;
 import physics.collisions.colliders.*;
+import physics.collisions.colliders.Collider;
+import physics.collisions.colliders.Sphere;
+import utilities.Vect3;
+
 
 public class DroneAI {
 	

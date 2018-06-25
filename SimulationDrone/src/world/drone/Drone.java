@@ -7,7 +7,13 @@ import org.w3c.dom.css.Rect;
 
 import com.sun.media.sound.InvalidDataException;
 
+import physics.PhysicsEngine;
+import physics.collisions.CollisionTools;
+import physics.collisions.colliders.Collider;
+import physics.collisions.colliders.Sphere;
 import sun.text.resources.is.CollationData_is;
+import utilities.Vect3;
+import world.WorldObject;
 
 import world.*;
 
@@ -24,7 +30,7 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 	private double payload;//Kg
 	private double motorThrottle;//%
 	private Vect3 propellerDirection;//the z axis vector in the drone local frame (pointing upwards, represent motor force) - should be updated by the AI
-	
+	private Station pluggedStation;//null if not connected to any station for recharging
 	
 	private Mission mission;
 	
@@ -126,7 +132,7 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 			Vector<Vect3> newpos = Collider.getCollidersCentersAfterCollision(thiscollider, wcollider);
 			
 			//update objects position
-			this.position=newpos.firstElement();
+			this.setPosition(newpos.firstElement());
 			w.setPosition(newpos.lastElement());
 
 			return true;
@@ -181,7 +187,10 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 		
 		updateSpeed(time);
 		
-		//if connected to station, recharge batteries
+		if(isPluggedToStation())
+		{
+			rechargeBattery(time);
+		}
 		
 		dischargeBattery(time);
 		
@@ -238,6 +247,32 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 		}
 	}
 	
+	public void plugToStation(Station st)
+	{
+		this.unplugFromStation();
+		
+		this.pluggedStation=st;
+		
+		if(!st.isPluggedToDrone(this))
+		{
+			st.plugToDrone(this);
+		}
+	}
+	
+	public void unplugFromStation()
+	{
+		if(this.pluggedStation!=null)
+		{
+			this.pluggedStation.unplugFromDrone();
+		}
+		
+		this.pluggedStation=null;
+	}
+	
+	public boolean isPluggedToStation()
+	{
+		return this.pluggedStation!=null;
+	}
 	
 	
 	@Override
