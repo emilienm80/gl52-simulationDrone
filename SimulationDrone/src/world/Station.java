@@ -64,6 +64,13 @@ public class Station extends WorldObject {
 		return this.pluggedDrone==d;
 	}
 
+	public Vect3 getLandingPoint()
+	{
+		Vect3 respos=getPosition();
+		respos.setZ(respos.getZ()+0.5*getSize().getZ());
+		
+		return respos;
+	}
 
 	@Override
 	public boolean collideWith(WorldObject w) {

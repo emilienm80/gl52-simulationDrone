@@ -112,7 +112,7 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 		
 		this.id=getNewId();
 		this.characteristics = dc;
-		this.brain = new DroneAI();
+		this.brain = new DroneAI(this);
 		this.batteryLevel = CollisionTools.limit(0.01*batteryLevel,0,1)*dc.getBatteryCapacity();
 		this.payload = payload;
 		this.motorThrottle = motorThrottle;
@@ -317,8 +317,57 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 	 */
 	public void decide(double time)
 	{
+		//the closest to goal has priority
+		//we should improve this by taking max speed in account 
 		
+		brain.decide();
+		
+		if(true) return;
+		
+		ArrayList<Message> inMes= moduleCOM.readAllMessages();
+		
+		Vect3 tp = brain.getTargetPos();
+		double myDistToGoal=getPosition().dist(tp);
+		double radiusFactor=5;
+		
+		for(Message m : inMes)
+		{
+			if(conflictWith(m.getTargetPos(), m.getvSpace()))
+			{
+				if(brain.getIntention()==ComInteract.Land && m.getInteraction()==ComInteract.Land)
+				{
+					double agentDistToGoal=m.getPosition().dist(m.getTargetPos());
+					if(myDistToGoal<agentDistToGoal)
+					{
+						moduleCOM.emitMessageFast(new Message(m.getSenderId(), "We have a conflict", null, Priority.Medium, ComInteract.ImFirst));
+					}
+					else
+					{
+						//find another station
+					}
+				}
+				else
+				{
+					if(m.getPosition().dist(getPosition())<(m.getvSpace()+characteristics.getRadius())*radiusFactor)
+					{
+						moduleCOM.emitMessageFast(new Message(m.getSenderId(), "Collision Danger", null, Priority.High, ComInteract.AvoidCollision));
+						
+						brain.goAwayFrom(m.getTargetPos());
+					}
+				}	
+			}
+		}
+		
+		//Message outMes=new Message(getId(), 0,  "", getPosition(), getSpeed(), null, null, getBatteryLevelRelative(), Priority.Medium, ComInteract.None, getSpeed().norm()+characteristics.getRadius());
+		//moduleCOM.emitMessage(outMes);
 	}
+	
+	private boolean conflictWith(Vect3 targetPos, double r)
+	{
+		return this.brain.getTargetPos().dist(targetPos) <= r+characteristics.getRadius();
+	}
+	
+
 	
 
 	

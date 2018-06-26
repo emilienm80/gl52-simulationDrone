@@ -108,6 +108,11 @@ public class RectCuboid extends Collider {
 		return origin.getAdded(size);
 	}
 	
+	public Vect3 getUpperFaceCenter()
+	{
+		return center.getAdded(new Vect3(0,0,0.5*getSize().getZ()));
+	}
+	
 	/*
 	public boolean pointIsInsideCuboid(Vect3 p)
 	{

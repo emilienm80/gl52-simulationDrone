@@ -104,6 +104,7 @@ public class Map {
     	double minsf=0.2;//min building size relative to map size
     	double maxsf=0.1;//max building size relative to map size
     	double stf=0.3;//sizefactor of stations relative to building upper surface dimensions
+    	double stfh=0.1;//sizefactor of stations height relative to building height
     	
     	for(int i=0; i<nbBuildings;i++)
     	{
@@ -119,7 +120,9 @@ public class Map {
 	            Station st=null;
 	            if(Math.random()<stationProba)
 	            {
-	            	st=new Station(rc.getCenter(), new Vect3(0, 0, 0), rc.getSize().getMultipliedBy(stf));
+	            	Vect3 stsize=rc.getSize().getMultipliedBy(stf);
+	            	stsize.setZ(stfh*rc.getSize().getZ());
+	            	st=new Station(rc.getUpperFaceCenter(), new Vect3(0, 0, 0), stsize);
 	            }
 	            
 	            b = new Building(rc.getCenter(), new Vect3(0, 0, 0), rc.getSize(), rc, st, "Building "+i);

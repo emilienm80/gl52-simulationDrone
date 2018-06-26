@@ -12,19 +12,20 @@ public class DroneAI {
 	
 	//TODO create a module dedicated to drone stabilization, which wraps movement according to target position and hides drone real displacement technique
 	//it will thus hide motorThrottle and maxLeaningAngle, which are quite tricky to handle for the user
-	
-	/**
-	 * Deprecated, use updateVItesse
-	 * @param m
-	 * @param time
-	 */
-	public void decide(Map m, double time)
-	{
-		
-	}
 
+	private Vect3 targetPos;
+	private ComInteract intention;
+	private Drone attachedDrone;
+	
+	public DroneAI(Drone d)
+	{
+		targetPos=new Vect3();
+		intention=ComInteract.None;
+		attachedDrone=d;
+	}
 	
 	public static class AI{
+		
 		
 		/**
 		 * TODO finish algo with building avoidance
@@ -33,7 +34,7 @@ public class DroneAI {
 		 * @param map the map in which the simulation is taking place
 		 * @return a 3 component vector containing the direction the drone has to move in
 		 */
-		public static Vect3 updateSpeed(Drone drone, Vect3 goalPosition, Map map) {
+		public static Vect3 updateSpeedppp(Drone drone, Vect3 goalPosition, Map map) {
 			Vect3 res;
 			Vect3 positionDrone = drone.getPosition();
 			Vect3 speed = new Vect3(positionDrone, goalPosition);
@@ -99,4 +100,60 @@ public class DroneAI {
 		}
 		
 	}
+	
+	public void goAwayFrom(Vect3 pos)
+	{
+		Vect3 cpos=attachedDrone.getPosition();
+		setTargetPos(cpos.getAdded(new Vect3(pos, cpos)));
+	}
+	
+	/**
+	 * update propdir and motor throttle
+	 */
+	private void updatePropellerMotion()
+	{
+		Vect3 currentPos=attachedDrone.getPosition();
+		Vect3 dir=new Vect3(currentPos, targetPos);
+		
+		if(dir.getZ()<=0)
+		{
+			System.out.println(currentPos+" "+targetPos);
+			attachedDrone.setMotorThrottle(0);
+			return;
+		}
+		
+		attachedDrone.setPropellerDirection(dir);
+		attachedDrone.setMotorThrottle(1);
+	}
+	
+	public void decide()
+	{
+		setTargetPos(attachedDrone.getNextObjective().getPosition());
+		updatePropellerMotion();
+	}
+
+	
+	public void setTargetPos(Vect3 targetPos)
+	{
+		this.targetPos=new Vect3(targetPos);
+	}
+	
+
+	public Vect3 getTargetPos() {
+		return new Vect3(targetPos);
+	}
+
+
+	public ComInteract getIntention() {
+		return intention;
+	}
+
+
+	public void setIntention(ComInteract intention) {
+		this.intention = intention;
+	}
+
+	
+	
+	
 }

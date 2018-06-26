@@ -71,11 +71,73 @@ public class CommunicationModule {
 	
 	//used by Drone
 	/**
+	 * read all messages from this module
+	 * @return
+	 */
+	public ArrayList<Message> readAllMessages()
+	{
+		ArrayList<Message> res=new ArrayList<Message>();
+			
+		while(!messagesBufferIN.isEmpty())
+		{
+			res.add(readNextMessage());
+		}
+		
+		return res;
+	}
+	
+	//used by Drone
+	/**
+	 * read all messages from this module targeted to this drone, while deleting others
+	 * @return
+	 */
+	public ArrayList<Message> readAllPersonalMessages()
+	{
+		ArrayList<Message> res=new ArrayList<Message>();
+			
+		while(!messagesBufferIN.isEmpty())
+		{
+			Message m=readNextMessage();
+			if(m.getReceiverId()==attachedDrone.getId())
+			{
+				res.add(m);
+			}
+		}
+		
+		return res;
+	}
+	
+	//used by Drone
+	/**
 	 * emit a message from the drone
 	 * @param m
 	 */
 	public void emitMessage(Message m)
 	{
 		messagesBufferOUT.add(m);
+	}
+
+	//used by Drone
+	/**
+	 * emit a message from the drone, easier to use, parameters autocompleting
+	 * @param m
+	 */
+	public void emitMessageFast(Message m)
+	{
+		m.setBatteryLevel(attachedDrone.getBatteryLevelRelative());
+		m.setMovingSpace(attachedDrone.getCharacteristics().getRadius());
+		m.setPosition(attachedDrone.getPosition());
+		m.setSenderId(attachedDrone.getId());
+		m.setSpeed(attachedDrone.getSpeed());
+		m.setTargetPos(attachedDrone.getBrain().getTargetPos());
+		
+		messagesBufferOUT.add(m);
+	}
+	
+
+	
+	public boolean receptionBufferEmpty()
+	{
+		return messagesBufferIN.isEmpty();
 	}
 }

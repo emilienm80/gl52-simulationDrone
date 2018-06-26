@@ -51,8 +51,8 @@ public class PhysicsEngine {
 				//d.setPropellerDirection(new Vect3(1,0.5,1));//for testing only. the drone should be further controlled with a command module		
 				
 				
-				Vect3 goalPosition = d.getNextObjective().getPosition();
-				d.setPropellerDirection(DroneAI.AI.updateSpeed(d, goalPosition, map));
+				//Vect3 goalPosition = d.getNextObjective().getPosition();
+				//d.setPropellerDirection(DroneAI.AI.updateSpeed(d, goalPosition, map));
 			}
 		}
 	}
