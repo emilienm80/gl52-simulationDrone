@@ -2,6 +2,8 @@ package world.drone;
 
 import java.util.ArrayList;
 
+import utilities.Vect3;
+import world.Emission;
 import world.Message;
 
 /**
@@ -13,15 +15,28 @@ public class CommunicationModule {
 
 	private ArrayList<Message> messagesBufferIN=new ArrayList<Message>();//messages waiting to be read by drone
 	private ArrayList<Message> messagesBufferOUT=new ArrayList<Message>();//messages waiting to be broadcasted through environment
+	private Drone attachedDrone;
 	
+	public CommunicationModule(Drone d)
+	{
+		attachedDrone=d;
+	}
+	
+	//TODO implement copy constructor -> deep copies lists
+
 	//used by PhysicsEngine
 	/**
 	 * makes the module receive ambient messages
 	 * @param mss
 	 */
-	public void receiveAmbientMessages(ArrayList<Message> mss)
+	public void receiveAmbientCommunications(ArrayList<Emission> ems)
 	{
-		this.messagesBufferIN.addAll(mss);
+		for (Emission em : ems) {
+			if (em.getCenter().dist(attachedDrone.getPosition()) <= em.getRadius())// if within range
+			{
+				this.messagesBufferIN.add(em.getMessage());
+			}
+		}
 	}
 	
 	//used by PhysicsEngine
@@ -29,10 +44,16 @@ public class CommunicationModule {
 	 * makes the module send messages in environment
 	 * @param mss
 	 */
-	public ArrayList<Message> sendPendingMessages()
+	public ArrayList<Emission> sendPendingMessages()
 	{
-		ArrayList<Message> res=this.messagesBufferOUT;
-		this.messagesBufferOUT=new ArrayList<Message>();
+		ArrayList<Emission> res=new ArrayList<Emission>();
+		
+		for (Message m : messagesBufferOUT) {
+			res.add(new Emission(new Vect3(attachedDrone.getPosition()), attachedDrone.getCharacteristics().getCommunicationRange(), m));
+		}
+
+		messagesBufferOUT.clear();
+		
 		return res;
 	}
 	

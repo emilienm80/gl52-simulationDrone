@@ -28,7 +28,7 @@ public class Emission {
 	}
 	
 	public Message getMessage() {
-		return message;
+		return new Message(message);
 	}
 	public void setMessage(Message message) {
 		this.message = message;

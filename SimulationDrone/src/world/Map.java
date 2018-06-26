@@ -3,6 +3,7 @@ package world;
 import java.util.ArrayList;
 
 import com.sun.java_cup.internal.runtime.virtual_parse_stack;
+import com.sun.xml.internal.ws.message.EmptyMessageImpl;
 
 import physics.collisions.CollisionTools;
 import physics.collisions.colliders.Collider;
@@ -18,6 +19,7 @@ public class Map {
     //private ArrayList<Drone> drones = new ArrayList<Drone>();
     //building
     private ArrayList<WorldObject> environment = new ArrayList<WorldObject>(); //buildings, stations and everything
+    
     private Constantes Const;
     
     private void createLimitBox()
@@ -233,6 +235,7 @@ public class Map {
 
         return this.environment;
     }
+    
     
     public ArrayList<Drone> getDrone() {
         ArrayList<Drone> res = new ArrayList<Drone>();

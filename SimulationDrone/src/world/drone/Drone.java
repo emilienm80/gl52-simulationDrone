@@ -35,6 +35,7 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 	private double motorThrottle;//%
 	private Vect3 propellerDirection;//the z axis vector in the drone local frame (pointing upwards, represent motor force) - should be updated by the AI
 	private Station pluggedStation;//null if not connected to any station for recharging
+	private CommunicationModule moduleCOM;
 	
 	private Mission mission;
 	
@@ -42,6 +43,15 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 		return id;
 	}
 	
+	
+	public CommunicationModule getModuleCOM() {
+		return moduleCOM;
+	}
+
+	public void setModuleCOM(CommunicationModule moduleCOM) {
+		this.moduleCOM = moduleCOM;
+	}
+
 	public DroneCharacteristics getCharacteristics() {
 		return characteristics;
 	}
@@ -107,10 +117,15 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 		this.payload = payload;
 		this.motorThrottle = motorThrottle;
 		this.propellerDirection=new Vect3(0,0,1);
+		this.moduleCOM=new CommunicationModule(this);
 		
 		this.mission = mission;
 	}
 	
+	/**
+	 * doesn't copy COM module current state
+	 * @param d
+	 */
 	public Drone(Drone d)
 	{
 		super(d);
@@ -122,6 +137,7 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 		payload=d.payload;
 		motorThrottle=d.motorThrottle;
 		propellerDirection=new Vect3(d.propellerDirection);
+		moduleCOM=new CommunicationModule(this);
 		
 		collider=createSpecificCollider();
 		

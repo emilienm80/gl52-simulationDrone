@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 import physics.collisions.CollisionSortElement;
 import utilities.Vect3;
+import world.Emission;
 import world.Map;
 import world.WorldObject;
+import world.drone.CommunicationModule;
 import world.drone.Drone;
 import world.drone.DroneAI;
 
@@ -14,6 +16,7 @@ public class PhysicsEngine {
 	public static final Vect3 Gravity=new Vect3(0,0,-9.81);
 	
 	private Map map;
+	private ArrayList<Emission> emissions = new ArrayList<Emission>(); //special list for electromagnetic wave emissions
 	
 	public PhysicsEngine(Map m) {
 		this.map=m;
@@ -32,6 +35,7 @@ public class PhysicsEngine {
 	public void updateWorld(ArrayList<WorldObject> world, double time)
 	{
 		processCollisions(world);
+		processCommunications(world);
 		
 		for (WorldObject w : world) {
 			
@@ -40,6 +44,7 @@ public class PhysicsEngine {
 			if(w instanceof Drone)
 			{
 				Drone d = ((Drone) w);
+				
 				d.updateMe(time);
 				//Vect3 goalPosition = d.getNextObjective().getPosition(); -> bug !
 				//d.setTargetDirection(DroneAI.AI.updateSpeed(d, goalPosition, map));
@@ -98,6 +103,24 @@ public class PhysicsEngine {
 		{
 			processCollisions(w, world);
 		}
+	}
+	
+	private void processCommunications(ArrayList<WorldObject> world)
+	{
+		ArrayList<Emission> newEmissions=new ArrayList<Emission>();
+		
+		for(WorldObject w : world)
+		{
+			if(w instanceof Drone)
+			{
+				Drone d = ((Drone) w);
+				CommunicationModule dcom=d.getModuleCOM();
+				dcom.receiveAmbientCommunications(emissions);
+				newEmissions.addAll(dcom.sendPendingMessages());
+			}
+		}
+		
+		emissions=newEmissions;
 	}
 	
 	private void collide(WorldObject w1, WorldObject w2)
