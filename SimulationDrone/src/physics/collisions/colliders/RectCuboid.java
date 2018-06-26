@@ -1,6 +1,8 @@
 package physics.collisions.colliders;
 
 import java.util.ArrayList;
+
+import physics.collisions.CollisionTools;
 import utilities.Vect3;
 
 
@@ -60,6 +62,22 @@ public class RectCuboid extends Collider {
 					p.getZ()<origin.getZ() || p.getZ()>p2.getZ());
 	}
 	
+	/**
+	 * 
+	 * @param p
+	 * @return the closest cuboid point from this point
+	 */
+	public Vect3 closestCuboidPoint(Vect3 p)
+	{
+		Vect3 top=getTop();
+		//closest point to the sphere belonging to the cuboid
+		Vect3 closestCuboidPoint=new Vect3(
+			CollisionTools.limit(p.getX(), origin.getX(), top.getX()), 
+			CollisionTools.limit(p.getY(), origin.getY(), top.getY()), 
+			CollisionTools.limit(p.getZ(), origin.getZ(), top.getZ()));
+		return closestCuboidPoint;
+	}
+	
 	public double volume()
 	{
 		return size.getX()*size.getY()*size.getZ();
@@ -113,13 +131,31 @@ public class RectCuboid extends Collider {
 		return center.getAdded(new Vect3(0,0,0.5*getSize().getZ()));
 	}
 	
-	/*
-	public boolean pointIsInsideCuboid(Vect3 p)
+	/**
+	 * 
+	 * @param p
+	 * @return true if the point is over or inside cuboid
+	 */
+	public boolean pointIsOverOrInsideCuboid(Vect3 p)
 	{
-		return 	p.getX()>this.origin.getX() && p.getX()<this.origin.getX()+this.size.getX() &&
-				p.getY()>this.origin.getY() && p.getY()<this.origin.getY()+this.size.getY() &&
-				p.getZ()>this.origin.getZ() && p.getZ()<this.origin.getZ()+this.size.getZ();
-	}*/
+		Vect3 p2=this.getTop();
+		return !( 	p.getX()<origin.getX() || p.getX()>p2.getX() || 
+					p.getY()<origin.getY() || p.getY()>p2.getY() ||
+					p.getZ()<origin.getZ() );
+	}
+	
+	/**
+	 * 
+	 * @param p
+	 * @return true if the point is over cuboid, but not inside
+	 */
+	public boolean pointIsOverCuboid(Vect3 p)
+	{
+		Vect3 p2=this.getTop();
+		return !( 	p.getX()<origin.getX() || p.getX()>p2.getX() || 
+					p.getY()<origin.getY() || p.getY()>p2.getY() ||
+					p.getZ()<p2.getZ() );
+	}
 	
 	/**
 	 * Find the 6 points belonging to the cuboid and each having at least 2 coordinates equal to those of p. 

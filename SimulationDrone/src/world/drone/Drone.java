@@ -167,9 +167,12 @@ public class Drone extends WorldObject /*implements Intelligence*/ {
 			this.setPosition(newpos.firstElement());
 			w.setPosition(newpos.lastElement());
 			
-			System.out.println(newpos.firstElement());
-			System.out.println(newpos.lastElement());
+			if(brain!=null)
+			{
+				brain.setLastCollider(wcollider);
+			}
 			
+			setSpeed(getSpeed().getMultipliedBy(0.5));//0.2=friction factor
 
 			return true;
 		}

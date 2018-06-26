@@ -83,6 +83,11 @@ public class Vect3 {
 		return dist(ZeroVect3);
 	}
 	
+	public double squaredNorm()
+	{
+		return squaredDist(ZeroVect3);
+	}
+	
 	/**
 	 * 
 	 * @return this vector with a norm of 1

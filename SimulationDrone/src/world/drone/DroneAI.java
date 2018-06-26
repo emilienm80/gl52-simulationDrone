@@ -2,6 +2,8 @@ package world.drone;
 
 import world.Map;
 import utilities.Vect3;
+import javafx.geometry.Rectangle2D;
+import physics.collisions.CollisionTools;
 import physics.collisions.colliders.*;
 import physics.collisions.colliders.Collider;
 import physics.collisions.colliders.Sphere;
@@ -16,6 +18,7 @@ public class DroneAI {
 	private Vect3 targetPos;
 	private ComInteract intention;
 	private Drone attachedDrone;
+	private Collider lastCollider;
 	
 	public DroneAI(Drone d)
 	{
@@ -34,7 +37,7 @@ public class DroneAI {
 		 * @param map the map in which the simulation is taking place
 		 * @return a 3 component vector containing the direction the drone has to move in
 		 */
-		public static Vect3 updateSpeedppp(Drone drone, Vect3 goalPosition, Map map) {
+		public static Vect3 updateSpeed(Drone drone, Vect3 goalPosition, Map map) {
 			Vect3 res;
 			Vect3 positionDrone = drone.getPosition();
 			Vect3 speed = new Vect3(positionDrone, goalPosition);
@@ -112,18 +115,65 @@ public class DroneAI {
 	 */
 	private void updatePropellerMotion()
 	{
+		Vect3 currentSpeed=attachedDrone.getSpeed();
 		Vect3 currentPos=attachedDrone.getPosition();
+		double radius=attachedDrone.getCharacteristics().getRadius();
 		Vect3 dir=new Vect3(currentPos, targetPos);
+		Vect3 normdir=dir.getNormalized();
 		
-		if(dir.getZ()<=0)
+		Vect3 dirXY=new Vect3(dir);
+		dirXY.setZ(0);
+		
+		double hoverSafetyDist=3;
+		double safetyDist=0.2;
+		double speedOnDirScaled=currentSpeed.dotProduct(dir)/dir.squaredNorm();
+		
+		if(dir.getZ()>0)
 		{
-			System.out.println(currentPos+" "+targetPos);
-			attachedDrone.setMotorThrottle(0);
+			attachedDrone.setPropellerDirection(new Vect3(0,0,1));
+			attachedDrone.setMotorThrottle(1);
 			return;
 		}
 		
-		attachedDrone.setPropellerDirection(dir);
-		attachedDrone.setMotorThrottle(1);
+		if(lastCollider!=null && lastCollider instanceof RectCuboid)
+		{
+			RectCuboid lcol=(RectCuboid)lastCollider;
+			Vect3 cp=lcol.closestCuboidPoint(currentPos);
+			double closestColPointDist=cp.dist(currentPos)+radius;
+			if(closestColPointDist<safetyDist)
+			{
+				//go away from collision point
+				attachedDrone.setPropellerDirection(new Vect3(cp, currentPos).add(new Vect3(0,0,3)));
+				attachedDrone.setMotorThrottle(1);
+				return;
+			}
+		}
+		
+		
+		if(dir.getZ()<0)
+		{
+			dir.setZ(0.1);
+			attachedDrone.setPropellerDirection(dir);
+			attachedDrone.setMotorThrottle(0.7);
+			return;
+		}
+		else
+		{
+			
+			if(dir.norm()<1 && dir.dotProduct(currentSpeed)>0)
+			{
+				attachedDrone.setPropellerDirection(dir.getNormalized().reverse().add(new Vect3(0,0,2)));
+				attachedDrone.setMotorThrottle(0.9);
+			}
+			else
+			{
+				attachedDrone.setPropellerDirection(dir);
+				attachedDrone.setMotorThrottle(1);
+			}
+			
+		}
+		
+		
 	}
 	
 	public void decide()
@@ -153,6 +203,15 @@ public class DroneAI {
 		this.intention = intention;
 	}
 
+	public Collider getLastCollider() {
+		return lastCollider;
+	}
+
+	public void setLastCollider(Collider lastCollider) {
+		this.lastCollider = lastCollider;
+	}
+
+	
 	
 	
 	
