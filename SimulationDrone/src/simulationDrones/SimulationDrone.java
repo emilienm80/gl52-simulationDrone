@@ -263,7 +263,6 @@ public class SimulationDrone extends Application {
         ArrayList<Drone> drones = map.getDrone();
         
         for(Drone drone : drones) {
-                System.out.println("ici");
         	gc.setFill(Color.web("#121212"));
         	double width = drone.getCharacteristics().getRadius()*200;//TODO adjust with proper constant (ratio between drone radius in meters and screen size in pixels)
         	System.out.println(drone.getPosition().getX()+" "+drone.getPosition().getY()+" "+ width+" "+width);
