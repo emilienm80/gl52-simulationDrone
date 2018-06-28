@@ -1,6 +1,10 @@
-package simulationDrones;
+package utilities;
 
 import java.util.ArrayList;
+
+import physics.collisions.CollisionTools;
+
+import java.math.*;
 
 /**
  * Class intended to represent either a 3D point or vector.
@@ -79,13 +83,25 @@ public class Vect3 {
 		return dist(ZeroVect3);
 	}
 	
+	public double squaredNorm()
+	{
+		return squaredDist(ZeroVect3);
+	}
+	
 	/**
 	 * 
 	 * @return this vector with a norm of 1
 	 */
 	public Vect3 getNormalized()
 	{
-		return this.getMultipliedBy(1/this.norm());
+		double norm=this.norm();
+		
+		if(norm==0)
+		{
+			return new Vect3(0,0,1);//we don't throw an exception, but orient it towards the z axis by convention
+		}
+		
+		return this.getMultipliedBy(1/norm);
 	}
 	
 	/**
@@ -94,7 +110,14 @@ public class Vect3 {
 	 */
 	public Vect3 Normalize()
 	{
-		return this.multiplyBy(1/this.norm());
+		double norm=this.norm();
+		
+		if(norm==0)
+		{
+			return this;//we don't throw an exception
+		}
+		
+		return this.multiplyBy(1/norm);
 	}
 	
 	public Vect3 reverse()
@@ -152,6 +175,15 @@ public class Vect3 {
 		return new Vect3(x-a.x, y-a.y, z-a.z);
 	}
 	
+	public double getAngle(Vect3 a) 
+	{
+		double res;
+		double temp = this.dotProduct(a);
+		temp = temp/(this.norm()*a.norm());
+		res = Math.acos(temp);
+		return res;
+	}
+	
 	/**
 	 * Multiply this vector by scalar c.
 	 * @param c
@@ -167,7 +199,7 @@ public class Vect3 {
 	}
 	
 	/**
-	 * Multiply pairs of coordinates (x*x,y*y,z*z)
+	 * Multiply pairs of coordinates (x*x,y*y,z*z) = combined product
 	 * @param v
 	 * @return this
 	 */
@@ -269,7 +301,32 @@ public class Vect3 {
 	public String toString() {
 		return "Vect3 [x=" + x + ", y=" + y + ", z=" + z + "]";
 	}
+	
+	/**
+	 * return a fixed length representation
+	 * @param len
+	 * @return
+	 */
+	public String toStringLen(int len, int decimals) {
+		String res="[x=" + CollisionTools.round(x, decimals) + ", y=" + CollisionTools.round(y, decimals) + ", z=" + CollisionTools.round(z, decimals) + "]";
+		int diff=len-res.length();
 
+		for(int i=0;i<diff;i++)
+		{
+			res+=" ";
+		}
+
+		return res=res.substring(0, len);
+	}
+	
+	/**
+	 * 
+	 * @return string formatted in dimensions (XxYxZ)
+	 */
+	public String toIntDimensions()
+	{
+		return (int)(x+0.5)+"x"+(int)(y+0.5)+"x"+(int)(z+0.5);
+	}
 
 
 	@Override
@@ -316,6 +373,11 @@ public class Vect3 {
 		return (v!=null) && v.x==x && v.y==y && v.z==z; 
 	}
 	
+	//deep copy
+	public Vect3 copy()
+	{
+		return new Vect3(this);
+	}
 
 
 }

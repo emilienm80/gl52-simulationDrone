@@ -1,19 +1,21 @@
-package simulationDrones;
+package world.drone;
 
 public class DroneCharacteristics {
 	
-	private double maxSpeed;//m/s
-	private Vect3 maneuverability;//m/s^2
+	//maxspeed is now a function of drag, propeller lift and motor power
+	private double maxLeaningAngle;//degrees, should be positive
 	private double radius;//m
 	private double motorEfficiency;//No unit
 	private double motorMaxConsumption;//W
-	private double propellerLift;//Kg/m^2/s
+	private double propellerLift;//s/m
 	private double maxPayload;//Kg
 	private double dryWeight;//Kg
 	private double batteryCapacity;//W.h=Joules/3600
 	private double batteryRechargingRate;//W
 	private double communicationRange;//m
+	private double airDrag;//Kg/m
 	//maxheight=communication range or map height bound
+
 	
 	public DroneCharacteristics()
 	{
@@ -27,15 +29,21 @@ public class DroneCharacteristics {
 
 	public void setCharacteristics(DroneType dt)
 	{
+		//The max propeller force (=motormaxconso*motorefficiency*propellerlift) should at least be equal to 9.81*dryWeight, otherwise your drone won't even takeoff.
+		//If you want to carry a payload of mass m, the recommended max propeller force is roughly 20*(dryweight+m)
+		//The maxLeaningAngle should ideally be such that when the drone is leaning at that angle with max throttle, its vertical speed is zero.
+		//Set a smaller angle if you want safety, and a larger if you want fast horizontal speeds
+		propellerLift=0.04;
+		airDrag=0.004;//airdrag will limit the maxspeed
+		
 		switch (dt) {
 	        case Mini://based on Parrot Mambo
-	        	maxSpeed=4.2;
-	        	maneuverability=new Vect3(1,1,1);
+	        	propellerLift=0.035;
+	    		airDrag=0.005;
+	    		maxLeaningAngle=30;
 	        	radius=0.09;
 	        	motorEfficiency=0.85;
 	        	motorMaxConsumption=25;//for 4 motors
-	        	//stationary = 12W
-	        	propellerLift=1;
 	        	maxPayload=0.005;
 	        	dryWeight=0.065;
 	        	batteryCapacity=2.2;//around 5 min autonomy at max throttle
@@ -43,13 +51,12 @@ public class DroneCharacteristics {
 	        	communicationRange=20;
 	            break;
 	        case Standard://based on DJI Spark
-	            maxSpeed=12;
-	        	maneuverability=new Vect3(1,1,1);
+	        	propellerLift=0.035;
+	    		airDrag=0.012;
+	        	maxLeaningAngle=25;
 	        	radius=0.11;
 	        	motorEfficiency=0.85;
 	        	motorMaxConsumption=100;//around 10 min autonomy at max throttle
-	        	//stationary = 68W
-	        	propellerLift=1;
 	        	maxPayload=0.03;
 	        	dryWeight=0.3;
 	        	batteryCapacity=17;
@@ -57,9 +64,6 @@ public class DroneCharacteristics {
 	        	communicationRange=100;
 	        	break;
 	        /*case Pro://based on YUNEEC H520
-	        	maxHSpeed=;
-	        	maxUpSpeed=;
-	            maxDownSpeed=;
 	        	maneuverability=new Vect3(1,1,1);
 	        	radius=;
 	        	motorEfficiency=;
@@ -72,13 +76,12 @@ public class DroneCharacteristics {
 	        	communicationRange=;
 	            break;*/
 	        case Transporter://based on DJI S900
-	            maxSpeed=16;
-	        	maneuverability=new Vect3(1,1,1);
+	        	propellerLift=0.04;
+	    		airDrag=0.02;
+	        	maxLeaningAngle=20;
 	        	radius=0.5;
 	        	motorEfficiency=0.9;
 	        	motorMaxConsumption=3000;//for 6 motors
-	        	//stationary = 1000W @ 6.8Kg
-	        	propellerLift=1;
 	        	maxPayload=4;
 	        	dryWeight=3.5;
 	        	batteryCapacity=300;
@@ -95,13 +98,9 @@ public class DroneCharacteristics {
 	 * Consumption takes only motors into account, and not electronic or communication components.
 	 */
 	
-	
-	public double getMaxSpeed() {
-		return maxSpeed;
-	}
 
-	public Vect3 getManeuverability() {
-		return maneuverability;
+	public double getMaxLeaningAngle() {
+		return maxLeaningAngle;
 	}
 
 	public double getRadius() {
@@ -138,6 +137,10 @@ public class DroneCharacteristics {
 	
 	public double getCommunicationRange() {
 		return communicationRange;
+	}
+	
+	public double getAirDrag() {
+		return airDrag;
 	}
 	
 	

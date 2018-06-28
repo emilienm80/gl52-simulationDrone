@@ -12,6 +12,12 @@ import javafx.stage.Screen;
  * @author Emilien
  */
 public class Constantes {
+	
+	public static final double DegToRad=Math.PI/180;
+	public static final double WsToWh=1.0/3600; //watt per second to watt per hour
+	
+	public static final double MeterToPixel=50;//1 meter in physicsEngine = ? pixels on screen, with a zoom of 1.0
+	
     public int BORDER_FRAME;
     public int BORDER_GROUPBOX;
     public int GROUPBOX_HEIGHT;

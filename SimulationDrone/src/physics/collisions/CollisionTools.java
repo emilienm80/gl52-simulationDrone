@@ -1,15 +1,19 @@
-package simulationDrones;
+package physics.collisions;
 
 import java.util.ArrayList;
 import java.util.Vector;
+import utilities.Vect3;
+import physics.collisions.colliders.*;
 
-//TODO decide if position should be already updated with the movement vector when entering collision functions
+import physics.collisions.colliders.Collider;
+import physics.collisions.colliders.RectCuboid;
+import physics.collisions.colliders.Sphere;
+import utilities.Vect3;
 
 //TODO add weight factors for collision between cuboid and sphere with 2 speeds
 
-//TODO return the two positions of objects after collision, or modify directly the parameters object's coordinates ?
+//TODO support collision between moving sphere and rectcuboid
 
-//TODO put collision tools in the Collider class
 
 /**
  * 
@@ -21,9 +25,15 @@ import java.util.Vector;
  * - sphere collides with cuboid<br>
  * <br>
  * Thus only 3 collision functions are necessary to find out if objects collided, and 3 more to find the the position of objects after they collided.
+ * <br><br>
+ * We assume that the collision avoidance system works a posteriori. In other words, the position of objects is considered already updated with their speed vector when entering collision functions (they are colliding).
+ * Consequently, the resulting position of a collision computing could get back in time.
+ * 
+ * Input colliders in arguments aren't supposed to be modified.
  */
 public class CollisionTools {
 
+	
 	/**
 	 * 
 	 * @param rc1
@@ -75,19 +85,19 @@ public class CollisionTools {
 	}
 	
 	/**
-	 * General instersect
+	 * General intersect
 	 * @param c1 first collider
 	 * @param c2 second collider
 	 * @return true if collision
 	 */
-	public static boolean interesect(Collider c1, Collider c2) {
+	public static boolean intersect(Collider c1, Collider c2) {
 		boolean res = false;
 		
 		if(c1 instanceof Sphere) {
 			if(c2 instanceof Sphere) {
 				res = intersect((Sphere) c1, (Sphere) c2);
 			}else if(c2 instanceof RectCuboid) {
-				res = intersect((RectCuboid) c1, (Sphere) c2);
+				res = intersect((RectCuboid) c2, (Sphere) c1);
 			}
 		}else if(c1 instanceof RectCuboid) {
 			if(c2 instanceof Sphere) {
@@ -137,7 +147,7 @@ public class CollisionTools {
 	}
 	
 	/**
-	 * Compute the exact positions of the spheres at the moment of collision. If there is no collision, returns the sphere centers moved by their movement vector.
+	 * Compute the exact positions of the spheres at the moment of collision. If there is no collision, returns the original spheres centers.
 	 * @param s1
 	 * @param s2
 	 * @param sphere1MovementVector
@@ -146,6 +156,10 @@ public class CollisionTools {
 	 */
 	public static Vector<Vect3> getSpheresCentersAtCollision(Sphere s1, Sphere s2, Vect3 sphere1MovementVector, Vect3 sphere2MovementVector)
 	{
+		//rewind one frame to get spheres centers before collision
+		s1.setCenter(s1.getCenter().getSubstracted(sphere1MovementVector));
+		s2.setCenter(s2.getCenter().getSubstracted(sphere2MovementVector));
+		
 		Vector<Vect3> res=new Vector<>();
 		Vect3 cs1;
 		Vect3 cs2;
@@ -304,5 +318,18 @@ public class CollisionTools {
 	public static boolean isWithin(double n, double min, double max)
 	{
 		return n>=min && n<=max;
+	}
+	
+	/**
+	 * Damn java that doesn't even have the fucking simplest math function.
+	 * 
+	 * I'm so angry that this function will not even check for bad arguments, ha !
+	 * @param n
+	 * @param decimals
+	 * @return
+	 */
+	public static double round(double n, int decimals) {
+		double power = Math.pow(10, decimals);
+		return Math.round(n * power) / power;
 	}
 }

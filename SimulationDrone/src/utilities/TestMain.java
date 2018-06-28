@@ -1,6 +1,9 @@
-package simulationDrones;
+package utilities;
 
 import java.util.Vector;
+
+import physics.collisions.CollisionTools;
+import physics.collisions.colliders.Sphere;
 
 public class TestMain {
 
@@ -53,9 +56,15 @@ public class TestMain {
 		System.out.println("s1 center : "+s1Center);
 		System.out.println("s2 center : "+s2Center);
 		
+<<<<<<< HEAD:SimulationDrone/src/simulationDrones/TestMain.java
 		System.out.println("\nTime : "+t/1000.0+" s");
 		
 		//getSpheresCentersAtCollision rated at an average execution time around 0.2s
+=======
+		System.out.println("\nTime : "+t/1000.0+" µs");
+		
+		//getSpheresCentersAtCollision rated at an average execution time around 0.2�s
+>>>>>>> 66bfa454a0470580197d63bc24c994801b458b86:SimulationDrone/src/utilities/TestMain.java
 	}
 
 }

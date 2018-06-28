@@ -6,6 +6,9 @@
 package simulationDrones;
 
 import java.util.ArrayList;
+
+import com.sun.org.apache.regexp.internal.recompile;
+
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -17,6 +20,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -31,14 +35,34 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import physics.PhysicsEngine;
+import physics.collisions.CollisionTools;
+import physics.collisions.colliders.Collider;
+import physics.collisions.colliders.RectCuboid;
+import physics.collisions.colliders.Sphere;
 import utilities.Constantes;
+import utilities.Vect3;
+import world.Building;
+import world.Map;
+import world.Station;
+import world.WorldObject;
+import world.drone.Drone;
+import world.drone.DroneCharacteristics;
+import world.drone.DroneType;
+import world.drone.Mission;
+import world.drone.MissionType;
+import world.drone.Objective;
+import world.drone.Priority;
 
 /**
  *
  * @author Emilien
  */
+
+//TODO create functions to draw each type of object, to make clearer code
 public class SimulationDrone extends Application {
 
+	private Rectangle2D viewCamRect;
     private Constantes Const;
     private int compt;
     private Group framePanel;
@@ -47,6 +71,9 @@ public class SimulationDrone extends Application {
     private Map map;
     private PhysicsEngine physicsEngine;
     private ArrayList<Building> buildings;
+    private double lastFrameTimestamp=0; 
+    private double frameTimeSum=0; 
+    private int nbFrame=0; 
 
     private void Initializer() {
         Const = new Constantes();
@@ -81,6 +108,7 @@ public class SimulationDrone extends Application {
                 createCanvas();
                 timer.start();
                 timeline.play();
+                lastFrameTimestamp=System.nanoTime();
             }
         });
 
@@ -132,22 +160,25 @@ public class SimulationDrone extends Application {
             	
             	DroneCharacteristics dc = new DroneCharacteristics(dt);
             	
-            	Station stationDepart = map.getBuildingByName(startingBuildingName).getStation();
+            	Building buildingDepart = map.getBuildingByName(startingBuildingName);
+            	Station stationDepart = buildingDepart.getStation();
             	
-            	Vect3 posDepart = stationDepart.getPosition();
+            	Vect3 posDepart = stationDepart.getLandingPoint().getAdded(new Vect3(0,0,dc.getRadius()));
             	Vect3 speed = new Vect3(0,0,0);
             	Vect3 size = new Vect3(0,0,0);
             	Sphere sph = new Sphere(posDepart, dc.getRadius());
             	
-            	Station stationArr = map.getBuildingByName(goalName).getStation();
+            	Building buildingArr = map.getBuildingByName(goalName);
+            	Station stationArr = buildingArr.getStation();
             	
-            	Vect3 posArr = stationArr.getPosition();
+            	Vect3 posArr = stationArr.getLandingPoint();
+            	//posArr.setZ(buildingArr.getSize().getZ()+stationArr.getSize().getZ());
             	
             	Objective obj = new Objective(posArr);
             	
             	Mission mission = new Mission(obj, p);
             	
-            	Drone d = new Drone(posDepart, speed, size, sph, dc, 100, 0, 0, mission);
+            	Drone d = new Drone(posDepart, speed, size, sph, dc, 80, 0, 0, mission);
             	
             	map.addDrone(d);
             }
@@ -229,6 +260,7 @@ public class SimulationDrone extends Application {
         compt = 100;
 
         final Canvas canvas = new Canvas(Const.CANVAS_WIDTH, Const.CANVAS_HEIGHT);
+        viewCamRect=new Rectangle2D(0, 0, Const.CANVAS_WIDTH, Const.CANVAS_HEIGHT);//current view area
         canvas.setTranslateX((Const.BORDER_FRAME * 2) + Const.GROUPBOX_WIDTH);
         canvas.setTranslateY(Const.BORDER_FRAME);
         Draw(canvas.getGraphicsContext2D());
@@ -236,11 +268,19 @@ public class SimulationDrone extends Application {
         timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
+            	nbFrame++;
             	
-            	double elapsedTime=0.06;//TODO get time diff between each frame
+            	double currentTimestamp=System.nanoTime();
+            	double elapsedTime=0.000000001*(currentTimestamp-lastFrameTimestamp);//seconds
+            	lastFrameTimestamp=currentTimestamp;
+            	frameTimeSum+=elapsedTime;
+            	
             	physicsEngine.updateMap(elapsedTime);//update world according to elapsed time
             	
+            	//System.out.print("Average Frame time : "+CollisionTools.round(1000*frameTimeSum/nbFrame,2)+" ms     ");
                 Draw(canvas.getGraphicsContext2D());
+                
+                
             }
         };
         framePanel.getChildren().add(canvas);
@@ -251,11 +291,17 @@ public class SimulationDrone extends Application {
         gc.fillRect(0, 0, Const.CANVAS_WIDTH, Const.CANVAS_HEIGHT);
         for (Building building : buildings) {
             gc.setFill(Color.web("#888888"));
-            gc.fillRect(building.getPosition().getX(), building.getPosition().getY(), building.getSize().getX(), building.getSize().getY());
+            Rectangle2D r=getDrawingRect(building);
+            gc.fillRect(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
+            gc.setFill(Color.WHITE);
+            gc.fillText(building.getName()+"\n"+building.getSize().toIntDimensions(), r.getMinX() + Const.BORDER_FRAME*0.25, r.getMinY() + Const.BORDER_FRAME*0.5, 100);
+            //gc.fillRect(building.getPosition().getX(), building.getPosition().getY(), building.getSize().getX(), building.getSize().getY());
+            
             if (building.getStation() != null){
                 gc.setFill(Color.WHITE);
-                gc.fillText(building.getName(), building.getPosition().getX() + Const.BORDER_FRAME, building.getPosition().getY() + Const.BORDER_FRAME, 100);
-                gc.fillRect(building.getStation().getPosition().getX(), building.getStation().getPosition().getY(), building.getStation().getSize().getX(), building.getStation().getSize().getY());                
+                r=getDrawingRect(building.getStation());
+                gc.fillRect(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
+                //gc.fillRect(building.getStation().getPosition().getX(), building.getStation().getPosition().getY(), building.getStation().getSize().getX(), building.getStation().getSize().getY());                
             }
 
         }
@@ -264,10 +310,82 @@ public class SimulationDrone extends Application {
         
         for(Drone drone : drones) {
         	gc.setFill(Color.web("#121212"));
-        	double width = drone.getCharacteristics().getRadius()*200;//TODO adjust with proper constant (ratio between drone radius in meters and screen size in pixels)
-        	System.out.println(drone.getPosition().getX()+" "+drone.getPosition().getY()+" "+ width+" "+width);
-        	gc.fillOval(drone.getPosition().getX(), drone.getPosition().getY(), width, width);
+        	//double width = 2*drone.getCharacteristics().getRadius()*100;//TODO adjust with proper constant (ratio between drone radius in meters and screen size in pixels)
+        	
+        	//System.out.println(drone.getPosition().getX()+" "+drone.getPosition().getY()+" "+drone.getPosition().getZ()+" "+ width+" "+width);
+        	//System.out.println("Pos "+drone.getPosition().toStringLen(50,3)+" Speed "+drone.getSpeed().toStringLen(50,3)+ " Motor consumption "+drone.getMotorConsumption()+" W");
+        	
+        	//gc.fillOval(drone.getPosition().getX(), drone.getPosition().getY(), width, width);
+        	Rectangle2D r=getDrawingRect(drone);
+        	gc.fillOval(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
+        	
+        	gc.fillText("z="+CollisionTools.round(drone.getPosition().getZ(),2), r.getMinX(), r.getMinY());
+        	gc.fillText(CollisionTools.round(drone.getBatteryLevelRelative()*100,1) +"%", r.getMinX(), r.getMinY()+30);
         }
+    }
+    
+    /**
+     * returns the drawing rect of a world object, ready to be drawn on screen
+     * @param w
+     * @return
+     */
+    private Rectangle2D getDrawingRect(WorldObject w)
+    {
+    	//TODO use precomputed constants to avoid too much subfunctions calls
+    	return getDrawingRectInPixels(getFittedToViewCamera(getRawDrawingRect(w)));    	
+    }
+    
+    private Rectangle2D getDrawingRectInPixels(Rectangle2D r)
+    {
+    	return new Rectangle2D(r.getMinX()*Constantes.MeterToPixel, r.getMinY()*Constantes.MeterToPixel, r.getWidth()*Constantes.MeterToPixel, r.getHeight()*Constantes.MeterToPixel);
+    }
+    
+    private Rectangle2D getRawDrawingRect(WorldObject w)
+    {
+    	Collider wcol=w.getCollider();
+    	
+    	if(wcol instanceof Sphere)
+    	{
+    		Vect3 c=wcol.getCenter();
+    		double r=((Sphere) wcol).getRadius();
+    		return new Rectangle2D(c.getX()-r, c.getY()-r, 2*r, 2*r);
+    	}
+    	else if(wcol instanceof RectCuboid)
+    	{
+    		Vect3 c=wcol.getCenter();
+    		Vect3 s=((RectCuboid) wcol).getSize();
+    		return new Rectangle2D(c.getX()-s.getX()*0.5, c.getY()-s.getY()*0.5, s.getX(), s.getY());
+    	}
+    	
+    	return new Rectangle2D(0,0,0,0);
+    }
+    
+    /**
+     * fit the drawing rect according to the view rectangle
+     * @param r
+     * @return
+     */
+    private Rectangle2D getFittedToViewCamera(Rectangle2D r)
+    {
+    	return new Rectangle2D(	r.getMinX()-viewCamRect.getMinX(), 
+    							r.getMinY()-viewCamRect.getMinY(), 
+    							r.getWidth()*Const.CANVAS_WIDTH/viewCamRect.getWidth(), 
+    							r.getHeight()*Const.CANVAS_HEIGHT/viewCamRect.getHeight());
+    }
+    
+    /**
+     * set the zoom of map display canvas, and center the view area
+     * @param zoom
+     */
+    public void setZoom(double zoom)
+    {
+    	if(zoom<=0) zoom=1;
+    	
+    	double w=Const.CANVAS_WIDTH/zoom;
+    	double h=Const.CANVAS_HEIGHT/zoom;
+    	
+    	viewCamRect=new Rectangle2D(0.5*(Const.CANVAS_WIDTH-w), 0.5*(Const.CANVAS_HEIGHT-h), w, h);
     }
 
 }
+
